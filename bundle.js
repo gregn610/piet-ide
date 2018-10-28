@@ -382,7 +382,7 @@ var DebugTab = exports.DebugTab = function DebugTab(props) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -403,385 +403,370 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 // main debugger component container
 var Debugger = function (_React$Component) {
-    _inherits(Debugger, _React$Component);
+  _inherits(Debugger, _React$Component);
 
-    function Debugger() {
-        _classCallCheck(this, Debugger);
+  function Debugger() {
+    _classCallCheck(this, Debugger);
 
-        var _this = _possibleConstructorReturn(this, (Debugger.__proto__ || Object.getPrototypeOf(Debugger)).call(this));
+    var _this = _possibleConstructorReturn(this, (Debugger.__proto__ || Object.getPrototypeOf(Debugger)).call(this));
 
-        _this.startPos = 0; // save the starting position of the debugger, for when it is dragged
-        return _this;
+    _this.startPos = 0; // save the starting position of the debugger, for when it is dragged
+    return _this;
+  }
+
+  _createClass(Debugger, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return _react2.default.createElement(
+        'div',
+        {
+          id: 'debugger',
+          style: {
+            gridColumn: 'debug',
+            gridRow: '1 / 5',
+            alignSelf: 'start',
+            marginTop: '0',
+            width: '225px',
+            border: '1px solid #ddd',
+            borderRadius: '5px',
+            background: 'white',
+            pointerEvents: 'auto'
+          }
+        },
+        _react2.default.createElement(
+          'div',
+          {
+            draggable: 'true',
+            style: {
+              height: '25px',
+              padding: '0 5px 5px',
+              borderBottom: '1px solid #ddd',
+              borderRadius: '5px 5px 0 0',
+              backgroundColor: '#eee',
+              cursor: 'ns-resize'
+            },
+            onDragStart: function onDragStart(event) {
+              event.dataTransfer.setData('text/plain', '');
+              _this2.startPos = event.screenY;
+            },
+            onDragEnd: function onDragEnd(event) {
+              var style = document.getElementById('debugger').style;
+              style.marginTop = 'calc(' + style.marginTop + ' + ' + event.screenY + 'px - ' + _this2.startPos + 'px )';
+            }
+          },
+          _react2.default.createElement(
+            'button',
+            {
+              type: 'button',
+              className: 'close',
+              'aria-label': 'Close',
+              onClick: function onClick() {
+                return _this2.props.toggleDebugger();
+              }
+            },
+            _react2.default.createElement(
+              'span',
+              { 'aria-hidden': 'true' },
+              '\xD7'
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { style: { padding: '5px' } },
+          _react2.default.createElement(Commands, _extends({}, this.props, this.props.debug)),
+          _react2.default.createElement(DebugControls, _extends({}, this.props, this.props.debug)),
+          _react2.default.createElement(Pointers, this.props.debug),
+          _react2.default.createElement(Stack, this.props.debug),
+          _react2.default.createElement(IO, _extends({}, this.props, this.props.debug))
+        )
+      );
     }
+  }]);
 
-    _createClass(Debugger, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                'div',
-                {
-                    id: 'debugger',
-                    style: {
-                        gridColumn: 'debug',
-                        gridRow: '1 / 5',
-                        alignSelf: 'start',
-                        marginTop: '0',
-                        width: '225px',
-                        border: '1px solid #ddd',
-                        borderRadius: '5px',
-                        background: 'white',
-                        pointerEvents: 'auto'
-                    } },
-                _react2.default.createElement(
-                    'div',
-                    {
-                        draggable: 'true',
-                        style: {
-                            height: '25px',
-                            padding: '0 5px 5px',
-                            borderBottom: '1px solid #ddd',
-                            borderRadius: '5px 5px 0 0',
-                            backgroundColor: '#eee',
-                            cursor: 'ns-resize'
-                        },
-                        onDragStart: function onDragStart(event) {
-                            event.dataTransfer.setData('text/plain', '');
-                            _this2.startPos = event.screenY;
-                        },
-                        onDragEnd: function onDragEnd(event) {
-                            var style = document.getElementById('debugger').style;
-                            style.marginTop = 'calc(' + style.marginTop + ' + ' + event.screenY + 'px - ' + _this2.startPos + 'px )';
-                        } },
-                    _react2.default.createElement(
-                        'button',
-                        {
-                            type: 'button',
-                            className: 'close',
-                            'aria-label': 'Close',
-                            onClick: function onClick() {
-                                return _this2.props.toggleDebugger();
-                            } },
-                        _react2.default.createElement(
-                            'span',
-                            { 'aria-hidden': 'true' },
-                            '\xD7'
-                        )
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { style: { padding: '5px' } },
-                    _react2.default.createElement(Commands, _extends({}, this.props, this.props.debug)),
-                    _react2.default.createElement(DebugControls, _extends({}, this.props, this.props.debug)),
-                    _react2.default.createElement(Pointers, this.props.debug),
-                    _react2.default.createElement(Stack, this.props.debug),
-                    _react2.default.createElement(IO, _extends({}, this.props, this.props.debug))
-                )
-            );
-        }
-    }]);
-
-    return Debugger;
+  return Debugger;
 }(_react2.default.Component);
 
 var Commands = function Commands(_ref) {
-    var commandList = _ref.commandList,
-        selectBlock = _ref.selectBlock,
-        isInterpreting = _ref.isInterpreting,
-        currCommand = _ref.currCommand;
-    return [_react2.default.createElement(
+  var commandList = _ref.commandList,
+      selectBlock = _ref.selectBlock,
+      isInterpreting = _ref.isInterpreting,
+      currCommand = _ref.currCommand;
+  return [_react2.default.createElement(
+    'div',
+    {
+      key: 'command-list',
+      style: {
+        margin: '5px auto 10px',
+        padding: '5px',
+        width: '100%',
+        height: '40vh',
+        resize: 'vertical',
+        overflow: 'auto',
+        fontFamily: 'monospace',
+        fontSize: '11pt',
+        backgroundColor: '#f5f5f5',
+        border: '1px solid #ccc'
+      }
+    },
+    commandList.map(function (command, i) {
+      return _react2.default.createElement(
         'div',
         {
-            key: 'command-list',
-            style: {
-                margin: '5px auto 10px',
-                padding: '5px',
-                width: '100%',
-                height: '40vh',
-                resize: 'vertical',
-                overflow: 'auto',
-                fontFamily: 'monospace',
-                fontSize: '11pt',
-                backgroundColor: '#f5f5f5',
-                border: '1px solid #ccc'
-            } },
-        commandList.map(function (command, i) {
-            return _react2.default.createElement(
-                'div',
-                {
-                    key: 'command-' + i,
-                    style: { textTransform: 'uppercase' },
-                    onMouseOver: function onMouseOver() {
-                        return !isInterpreting && selectBlock(command.block);
-                    },
-                    onMouseOut: function onMouseOut() {
-                        return !isInterpreting && selectBlock(null);
-                    } },
-                command.inst,
-                command.error && [' ', _react2.default.createElement('i', {
-                    key: 'error-' + i,
-                    className: 'glyphicon glyphicon-exclamation-sign',
-                    style: { color: 'red' },
-                    title: command.error
-                })]
-            );
-        })
-    ), isInterpreting && currCommand && _react2.default.createElement(
-        'div',
-        {
-            key: 'current-command',
-            style: {
-                margin: '-5px 0 10px',
-                width: '100%',
-                fontWeight: 'bold',
-                textAlign: 'center'
-            } },
-        'Current command:',
-        _react2.default.createElement('br', null),
-        currCommand.inst.toUpperCase(),
-        currCommand.error && _react2.default.createElement(
-            'div',
-            { style: { color: 'red' } },
-            currCommand.error
-        )
-    )];
+          key: 'command-' + i,
+          style: { textTransform: 'uppercase' },
+          onMouseOver: function onMouseOver() {
+            return !isInterpreting && selectBlock(command.block);
+          },
+          onMouseOut: function onMouseOut() {
+            return !isInterpreting && selectBlock(null);
+          }
+        },
+        command.inst,
+        command.error && [' ', _react2.default.createElement('i', {
+          key: 'error-' + i,
+          className: 'glyphicon glyphicon-exclamation-sign',
+          style: { color: 'red' },
+          title: command.error
+        })]
+      );
+    })
+  ), isInterpreting && currCommand && _react2.default.createElement(
+    'div',
+    {
+      key: 'current-command',
+      style: {
+        margin: '-5px 0 10px',
+        width: '100%',
+        fontWeight: 'bold',
+        textAlign: 'center'
+      }
+    },
+    'Current command:',
+    _react2.default.createElement('br', null),
+    currCommand.inst.toUpperCase(),
+    currCommand.error && _react2.default.createElement(
+      'div',
+      { style: { color: 'red' } },
+      currCommand.error
+    )
+  )];
 };
 
 // run/step/continue/stop/pause + set BP control buttons
 var DebugControls = function DebugControls(_ref2) {
-    var start = _ref2.start,
-        pause = _ref2.pause,
-        step = _ref2.step,
-        cont = _ref2.cont,
-        stop = _ref2.stop,
-        runSpeed = _ref2.runSpeed,
-        isInterpreting = _ref2.isInterpreting,
-        setRunSpeed = _ref2.setRunSpeed,
-        paintMode = _ref2.paintMode,
-        toggleSetBP = _ref2.toggleSetBP;
-    return _react2.default.createElement(
-        'div',
-        { className: 'btn-toolbar', role: 'toolbar', style: { margin: '0 0 1vh' } },
-        _react2.default.createElement(
-            'div',
-            { className: 'btn-group btn-group-sm', style: { width: '52px', margin: '0' } },
-            _react2.default.createElement(
-                'button',
-                {
-                    type: 'button',
-                    className: 'btn btn-success',
-                    title: 'Run from the beginning',
-                    onClick: function onClick() {
-                        return start();
-                    } },
-                _react2.default.createElement('i', { className: 'glyphicon glyphicon-play' })
-            ),
-            _react2.default.createElement(
-                'button',
-                {
-                    type: 'button',
-                    className: 'btn btn-success dropdown-toggle',
-                    title: 'Set run speed',
-                    'data-toggle': 'dropdown',
-                    'aria-haspopup': 'true',
-                    'aria-expanded': 'false',
-                    style: { width: '18px', paddingLeft: '4px', paddingRight: '4px' } },
-                _react2.default.createElement('span', { className: 'caret' }),
-                _react2.default.createElement(
-                    'span',
-                    { className: 'sr-only' },
-                    'Toggle Dropdown'
-                )
-            ),
-            _react2.default.createElement(
-                'ul',
-                { className: 'dropdown-menu' },
-                _react2.default.createElement(
-                    'li',
-                    { style: { padding: '0 5px' } },
-                    _react2.default.createElement(
-                        'small',
-                        { style: { float: 'left' } },
-                        'Slower'
-                    ),
-                    _react2.default.createElement(
-                        'small',
-                        { style: { float: 'right' } },
-                        'Faster'
-                    ),
-                    _react2.default.createElement('input', {
-                        type: 'range',
-                        min: '0',
-                        max: '1000',
-                        step: '100',
-                        value: 1000 - runSpeed,
-                        onChange: function onChange(event) {
-                            return !isInterpreting && setRunSpeed(1000 - event.target.value);
-                        }
-                    })
-                )
-            )
-        ),
-        _react2.default.createElement(
-            'div',
-            {
-                className: 'btn-group btn-group-sm',
-                role: 'group',
-                style: { width: '136px', margin: '0 0 0 4px' } },
-            _react2.default.createElement(
-                'button',
-                { type: 'button', className: 'btn btn-warning', title: 'Pause', onClick: function onClick() {
-                        return pause();
-                    } },
-                _react2.default.createElement('i', { className: 'glyphicon glyphicon-pause' })
-            ),
-            _react2.default.createElement(
-                'button',
-                { type: 'button', className: 'btn btn-info', title: 'Step', onClick: function onClick() {
-                        return step();
-                    } },
-                _react2.default.createElement('i', { className: 'glyphicon glyphicon-step-forward' })
-            ),
-            _react2.default.createElement(
-                'button',
-                {
-                    type: 'button',
-                    className: 'btn btn-primary',
-                    title: 'Continue running from this point',
-                    onClick: function onClick() {
-                        return cont();
-                    } },
-                _react2.default.createElement('i', { className: 'glyphicon glyphicon-fast-forward' })
-            ),
-            _react2.default.createElement(
-                'button',
-                { type: 'button', className: 'btn btn-danger', title: 'Stop', onClick: function onClick() {
-                        return stop();
-                    } },
-                _react2.default.createElement('i', { className: 'glyphicon glyphicon-stop' })
-            )
-        ),
-        _react2.default.createElement('i', {
-            className: 'glyphicon glyphicon-map-marker',
-            title: 'Set breakpoints',
-            style: {
-                fontSize: '18px',
-                margin: '0 0 0 3px',
-                padding: '5px 0',
-                cursor: 'pointer',
-                color: paintMode == 'BP' ? 'red' : 'black'
-            },
-            onClick: function onClick() {
-                return toggleSetBP();
-            }
-        })
-    );
+  var start = _ref2.start,
+      pause = _ref2.pause,
+      step = _ref2.step,
+      cont = _ref2.cont,
+      stop = _ref2.stop,
+      runSpeed = _ref2.runSpeed,
+      isInterpreting = _ref2.isInterpreting,
+      setRunSpeed = _ref2.setRunSpeed,
+      paintMode = _ref2.paintMode,
+      toggleSetBP = _ref2.toggleSetBP;
+  return _react2.default.createElement(
+    'div',
+    { className: 'btn-toolbar', role: 'toolbar', style: { margin: '0 0 1vh' } },
+    _react2.default.createElement(
+      'div',
+      {
+        className: 'btn-group btn-group-sm',
+        style: { width: '52px', margin: '0' }
+      },
+      _react2.default.createElement(
+        'button',
+        {
+          type: 'button',
+          className: 'btn btn-success',
+          title: 'Run from the beginning',
+          onClick: function onClick() {
+            return start();
+          }
+        },
+        _react2.default.createElement('i', { className: 'glyphicon glyphicon-play' })
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      {
+        className: 'btn-group btn-group-sm',
+        role: 'group',
+        style: { width: '136px', margin: '0 0 0 4px' }
+      },
+      _react2.default.createElement(
+        'button',
+        {
+          type: 'button',
+          className: 'btn btn-warning',
+          title: 'Pause',
+          onClick: function onClick() {
+            return pause();
+          }
+        },
+        _react2.default.createElement('i', { className: 'glyphicon glyphicon-pause' })
+      ),
+      _react2.default.createElement(
+        'button',
+        {
+          type: 'button',
+          className: 'btn btn-info',
+          title: 'Step',
+          onClick: function onClick() {
+            return step();
+          }
+        },
+        _react2.default.createElement('i', { className: 'glyphicon glyphicon-step-forward' })
+      ),
+      _react2.default.createElement(
+        'button',
+        {
+          type: 'button',
+          className: 'btn btn-primary',
+          title: 'Continue running from this point',
+          onClick: function onClick() {
+            return cont();
+          }
+        },
+        _react2.default.createElement('i', { className: 'glyphicon glyphicon-fast-forward' })
+      ),
+      _react2.default.createElement(
+        'button',
+        {
+          type: 'button',
+          className: 'btn btn-danger',
+          title: 'Stop',
+          onClick: function onClick() {
+            return stop();
+          }
+        },
+        _react2.default.createElement('i', { className: 'glyphicon glyphicon-stop' })
+      )
+    ),
+    _react2.default.createElement('i', {
+      className: 'glyphicon glyphicon-map-marker',
+      title: 'Set breakpoints',
+      style: {
+        fontSize: '18px',
+        margin: '0 0 0 3px',
+        padding: '5px 0',
+        cursor: 'pointer',
+        color: paintMode == 'BP' ? 'red' : 'black'
+      },
+      onClick: function onClick() {
+        return toggleSetBP();
+      }
+    })
+  );
 };
 
 // IO visual containers
 var IO = function IO(_ref3) {
-    var output = _ref3.output,
-        isInterpreting = _ref3.isInterpreting;
-    return [_react2.default.createElement(
-        'b',
-        { key: 'input-label' },
-        'Input'
-    ), _react2.default.createElement('br', { key: 'br-1' }), _react2.default.createElement('textarea', {
-        key: 'in',
-        id: 'in',
-        placeholder: 'Enter input before running program',
-        title: 'Tip: Whitespace before a numerical value is ignored',
-        readOnly: isInterpreting,
-        style: {
-            width: '100%',
-            maxWidth: '100%',
-            fontFamily: 'monospace',
-            fontSize: '12pt'
-        }
-    }), _react2.default.createElement('br', { key: 'br-2' }), _react2.default.createElement(
-        'b',
-        { key: 'output-label' },
-        'Output'
-    ), _react2.default.createElement('br', { key: 'br-3' }), _react2.default.createElement('textarea', {
-        key: 'out',
-        id: 'out',
-        readOnly: true,
-        style: {
-            width: '100%',
-            maxWidth: '100%',
-            fontFamily: 'monospace',
-            fontSize: '12pt'
-        },
-        value: output
-    })];
+  var output = _ref3.output,
+      isInterpreting = _ref3.isInterpreting;
+  return [_react2.default.createElement(
+    'b',
+    { key: 'input-label' },
+    'Input'
+  ), _react2.default.createElement('br', { key: 'br-1' }), _react2.default.createElement('textarea', {
+    key: 'in',
+    id: 'in',
+    placeholder: 'Enter input before running program',
+    title: 'Tip: Whitespace before a numerical value is ignored',
+    readOnly: isInterpreting,
+    style: {
+      width: '100%',
+      maxWidth: '100%',
+      fontFamily: 'monospace',
+      fontSize: '12pt'
+    }
+  }), _react2.default.createElement('br', { key: 'br-2' }), _react2.default.createElement(
+    'b',
+    { key: 'output-label' },
+    'Output'
+  ), _react2.default.createElement('br', { key: 'br-3' }), _react2.default.createElement('textarea', {
+    key: 'out',
+    id: 'out',
+    readOnly: true,
+    style: {
+      width: '100%',
+      maxWidth: '100%',
+      fontFamily: 'monospace',
+      fontSize: '12pt'
+    },
+    value: output
+  })];
 };
 
 // visual representation of stack
 var Stack = function Stack(_ref4) {
-    var stack = _ref4.stack;
-    return _react2.default.createElement(
-        'table',
-        { style: { margin: 'auto auto 1vh', width: '100%' } },
+  var stack = _ref4.stack;
+  return _react2.default.createElement(
+    'table',
+    { style: { margin: 'auto auto 1vh', width: '100%' } },
+    _react2.default.createElement(
+      'thead',
+      null,
+      _react2.default.createElement(
+        'tr',
+        null,
         _react2.default.createElement(
-            'thead',
+          'td',
+          null,
+          _react2.default.createElement(
+            'b',
             null,
-            _react2.default.createElement(
-                'tr',
-                null,
-                _react2.default.createElement(
-                    'td',
-                    null,
-                    _react2.default.createElement(
-                        'b',
-                        null,
-                        'Stack'
-                    )
-                )
-            )
-        ),
-        _react2.default.createElement(
-            'tbody',
-            null,
-            stack.concat('⮟').map(function (val, i) {
-                return _react2.default.createElement(
-                    'tr',
-                    {
-                        key: 'val-' + i,
-                        style: {
-                            border: '1px solid black',
-                            width: '100%',
-                            height: '2ex',
-                            textAlign: 'center',
-                            verticalAlign: 'center',
-                            fontFamily: 'monospace',
-                            fontSize: '12pt',
-                            wordBreak: 'break-all'
-                        } },
-                    _react2.default.createElement(
-                        'td',
-                        null,
-                        val
-                    )
-                );
-            })
+            'Stack'
+          )
         )
-    );
+      )
+    ),
+    _react2.default.createElement(
+      'tbody',
+      null,
+      stack.concat('⮟').map(function (val, i) {
+        return _react2.default.createElement(
+          'tr',
+          {
+            key: 'val-' + i,
+            style: {
+              border: '1px solid black',
+              width: '100%',
+              height: '2ex',
+              textAlign: 'center',
+              verticalAlign: 'center',
+              fontFamily: 'monospace',
+              fontSize: '12pt',
+              wordBreak: 'break-all'
+            }
+          },
+          _react2.default.createElement(
+            'td',
+            null,
+            val
+          )
+        );
+      })
+    )
+  );
 };
 
 // visual representation of program pointers
 var Pointers = function Pointers(_ref5) {
-    var DP = _ref5.DP,
-        CC = _ref5.CC;
-    return _react2.default.createElement(
-        'div',
-        { style: { width: '100%', textAlign: 'center', fontWeight: 'bold' } },
-        'DP:\xA0',
-        _react2.default.createElement('i', { className: 'glyphicon glyphicon-arrow-' + ['right', 'down', 'left', 'up'][DP] }),
-        '\u2003 CC:\xA0',
-        _react2.default.createElement('i', { className: 'glyphicon glyphicon-arrow-' + ['left', 'right'][CC] })
-    );
+  var DP = _ref5.DP,
+      CC = _ref5.CC;
+  return _react2.default.createElement(
+    'div',
+    { style: { width: '100%', textAlign: 'center', fontWeight: 'bold' } },
+    'DP:\xA0',
+    _react2.default.createElement('i', {
+      className: 'glyphicon glyphicon-arrow-' + ['right', 'down', 'left', 'up'][DP]
+    }),
+    '\u2003 CC:\xA0',
+    _react2.default.createElement('i', { className: 'glyphicon glyphicon-arrow-' + ['left', 'right'][CC] })
+  );
 };
 
 exports.default = Debugger;
