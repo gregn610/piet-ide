@@ -329,7 +329,7 @@ const appState = {
   }).bind(this),
 
   debug: {
-    debugIsVisible: false, // initially, debugger is not visible
+    debugIsVisible: true, // initially, debugger is not visible
 
     commandList: [],
     interpreter: null,

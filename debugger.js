@@ -106,25 +106,25 @@ const Commands = ({
       </div>
     ))}
   </div>,
-  isInterpreting &&
-    currCommand && (
-      <div
-        key="current-command"
-        style={{
-          margin: '-5px 0 10px',
-          width: '100%',
-          fontWeight: 'bold',
-          textAlign: 'center'
-        }}
-      >
-        Current command:
-        <br />
-        {currCommand.inst.toUpperCase()}
-        {currCommand.error && (
+  <div
+    key="current-command"
+    style={{
+      margin: '-5px 0 10px',
+      width: '100%',
+      fontWeight: 'bold',
+      textAlign: 'center'
+    }}
+  >
+    Current command:
+    <br />
+    <div style={{ height: 24 }}>
+      {currCommand && currCommand.inst && currCommand.inst.toUpperCase()}
+      {currCommand &&
+        currCommand.error && (
           <div style={{ color: 'red' }}>{currCommand.error}</div>
         )}
-      </div>
-    )
+    </div>
+  </div>
 ];
 
 // run/step/continue/stop/pause + set BP control buttons
