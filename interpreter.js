@@ -677,6 +677,16 @@ function* interpret(grid, blocks, blockSizes, getInputNum, getInputChar) {
           break;
       }
 
+      // better comands string
+      if (currCommand.inst === '+') currCommand.inst = 'add';
+      else if (currCommand.inst === '-') currCommand.inst = 'sub';
+      else if (currCommand.inst === '*') currCommand.inst = 'multi';
+      else if (currCommand.inst === '/') currCommand.inst = 'divid';
+      else if (currCommand.inst === '>') currCommand.inst = 'gre';
+      else if (currCommand.inst === 'out(num)') currCommand.inst = 'out_num';
+      else if (currCommand.inst === 'out(char)') currCommand.inst = 'out_char';
+      else if (currCommand.inst === 'in(num)') currCommand.inst = 'in_num';
+      else if (currCommand.inst === 'in(char)') currCommand.inst = 'in_char';
       commandList.push(currCommand); // add the current command to the command list
     }
   }

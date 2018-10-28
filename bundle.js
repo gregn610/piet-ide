@@ -1699,7 +1699,7 @@ function interpret(grid, blocks, blockSizes, getInputNum, getInputChar) {
 
         case 4:
           if (!(bounceCount < 8)) {
-            _context.next = 168;
+            _context.next = 169;
             break;
           }
 
@@ -1722,7 +1722,7 @@ function interpret(grid, blocks, blockSizes, getInputNum, getInputChar) {
           return bounce();
 
         case 11:
-          _context.next = 166;
+          _context.next = 167;
           break;
 
         case 13:
@@ -1762,7 +1762,7 @@ function interpret(grid, blocks, blockSizes, getInputNum, getInputChar) {
 
 
           bounceCount = 0; // we can move, so reset the bounce count
-          _context.next = 166;
+          _context.next = 167;
           break;
 
         case 27:
@@ -2235,13 +2235,15 @@ function interpret(grid, blocks, blockSizes, getInputNum, getInputChar) {
 
         case 165:
 
+          // better comands string
+          if (currCommand.inst === '+') currCommand.inst = 'add';else if (currCommand.inst === '-') currCommand.inst = 'sub';else if (currCommand.inst === '*') currCommand.inst = 'multi';else if (currCommand.inst === '/') currCommand.inst = 'divid';else if (currCommand.inst === '>') currCommand.inst = 'gre';else if (currCommand.inst === 'out(num)') currCommand.inst = 'out_num';else if (currCommand.inst === 'out(char)') currCommand.inst = 'out_char';else if (currCommand.inst === 'in(num)') currCommand.inst = 'in_num';else if (currCommand.inst === 'in(char)') currCommand.inst = 'in_char';
           commandList.push(currCommand); // add the current command to the command list
 
-        case 166:
+        case 167:
           _context.next = 4;
           break;
 
-        case 168:
+        case 169:
         case 'end':
           return _context.stop();
       }
