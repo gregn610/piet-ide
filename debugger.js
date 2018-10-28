@@ -269,23 +269,26 @@ const Stack = ({ stack }) => (
       </tr>
     </thead>
     <tbody>
-      {stack.concat('⮟').map((val, i) => (
-        <tr
-          key={'val-' + i}
-          style={{
-            border: '1px solid black',
-            width: '100%',
-            height: '2ex',
-            textAlign: 'center',
-            verticalAlign: 'center',
-            fontFamily: 'monospace',
-            fontSize: '12pt',
-            wordBreak: 'break-all'
-          }}
-        >
-          <td>{val}</td>
-        </tr>
-      ))}
+      {stack
+        .concat('⮟')
+        .reverse()
+        .map((val, i) => (
+          <tr
+            key={'val-' + i}
+            style={{
+              border: '1px solid black',
+              width: '100%',
+              height: '2ex',
+              textAlign: 'center',
+              verticalAlign: 'center',
+              fontFamily: 'monospace',
+              fontSize: '12pt',
+              wordBreak: 'break-all'
+            }}
+          >
+            <td>{val}</td>
+          </tr>
+        ))}
     </tbody>
   </table>
 );

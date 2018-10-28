@@ -726,7 +726,7 @@ var Stack = function Stack(_ref4) {
     _react2.default.createElement(
       'tbody',
       null,
-      stack.concat('⮟').map(function (val, i) {
+      stack.concat('⮟').reverse().map(function (val, i) {
         return _react2.default.createElement(
           'tr',
           {
