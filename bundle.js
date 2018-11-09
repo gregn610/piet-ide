@@ -53,7 +53,7 @@ var ColourCell = function ColourCell(props) {
     {
       colSpan: props.colSpan ? props.colSpan : '1',
       style: {
-        'box-sizing': 'border-box',
+        boxSizing: 'border-box',
         height: '32px',
         padding: '5px',
         backgroundColor: _colours.colours[props.cellColour],
@@ -224,12 +224,26 @@ var Controls = function (_React$Component) {
         _react2.default.createElement('input', {
           type: 'button',
           className: 'btn btn-warning',
-          value: 'Resize / Clear',
+          value: 'Resize',
           disabled: this.props.isInterpreting ? 'disabled' : '',
           onClick: function onClick() {
             return _this2.props.resize({
               height: parseInt(_this2.height.value),
-              width: parseInt(_this2.width.value)
+              width: parseInt(_this2.width.value),
+              clear: false
+            });
+          }
+        }),
+        _react2.default.createElement('input', {
+          type: 'button',
+          className: 'btn btn-warning',
+          value: 'Clear',
+          disabled: this.props.isInterpreting ? 'disabled' : '',
+          onClick: function onClick() {
+            return _this2.props.resize({
+              height: parseInt(_this2.height.value),
+              width: parseInt(_this2.width.value),
+              clear: true
             });
           }
         })
@@ -969,14 +983,28 @@ var appState = {
 
   resize: function (_ref) {
     var height = _ref.height,
-        width = _ref.width;
+        width = _ref.width,
+        clear = _ref.clear;
 
     appState.height = height;
     appState.width = width;
 
+    var previous_grid = appState.grid;
+    var old_height = previous_grid.length;
+    var old_width = previous_grid[0].length;
+    // console.log(previous_grid);
+
     appState.grid = Array(height).fill(0).map(function (_) {
       return Array(width).fill(_colours.WHITE);
     });
+
+    if (!clear) {
+      for (var i = 0; i < Math.min(height, old_height); i++) {
+        for (var j = 0; j < Math.min(width, old_width); j++) {
+          appState.grid[i][j] = previous_grid[i][j];
+        }
+      }
+    }
 
     appState.blockSizes = Array(height).fill(0).map(function (_) {
       return Array(width).fill(height * width);

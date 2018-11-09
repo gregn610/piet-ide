@@ -32,7 +32,7 @@ const ColourCell = props => (
   <div
     colSpan={props.colSpan ? props.colSpan : '1'}
     style={{
-      'box-sizing': 'border-box',
+      boxSizing: 'border-box',
       height: '32px',
       padding: '5px',
       backgroundColor: colours[props.cellColour],

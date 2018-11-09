@@ -68,13 +68,26 @@ const appState = {
   // notify listeners
   notify: (() => appState.listeners.forEach(listener => listener())).bind(this),
 
-  resize: (({ height, width }) => {
+  resize: (({ height, width, clear }) => {
     appState.height = height;
     appState.width = width;
+
+    const previous_grid = appState.grid;
+    const old_height = previous_grid.length;
+    const old_width = previous_grid[0].length;
+    // console.log(previous_grid);
 
     appState.grid = Array(height)
       .fill(0)
       .map(_ => Array(width).fill(WHITE));
+
+    if (!clear) {
+      for (let i = 0; i < Math.min(height, old_height); i++) {
+        for (let j = 0; j < Math.min(width, old_width); j++) {
+          appState.grid[i][j] = previous_grid[i][j];
+        }
+      }
+    }
 
     appState.blockSizes = Array(height)
       .fill(0)

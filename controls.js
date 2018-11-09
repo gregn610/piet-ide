@@ -67,12 +67,26 @@ class Controls extends React.Component {
         <input
           type="button"
           className="btn btn-warning"
-          value="Resize / Clear"
+          value="Resize"
           disabled={this.props.isInterpreting ? 'disabled' : ''}
           onClick={() =>
             this.props.resize({
               height: parseInt(this.height.value),
-              width: parseInt(this.width.value)
+              width: parseInt(this.width.value),
+              clear: false
+            })
+          }
+        />
+        <input
+          type="button"
+          className="btn btn-warning"
+          value="Clear"
+          disabled={this.props.isInterpreting ? 'disabled' : ''}
+          onClick={() =>
+            this.props.resize({
+              height: parseInt(this.height.value),
+              width: parseInt(this.width.value),
+              clear: true
             })
           }
         />
