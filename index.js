@@ -571,8 +571,8 @@ class App extends React.Component {
           gridColumnGap: '1vw',
           gridRowGap: '1vh',
           gridTemplateColumns: this.props.appState.debug.debugIsVisible
-            ? '375px 300px auto 225px'
-            : '375px 300px auto 25px',
+            ? '375px 500px auto 225px'
+            : '375px 500px auto 25px',
           gridTemplateRows: '35px 35px 35px auto',
           gridTemplateAreas: this.props.appState.debug.debugIsVisible
             ? `'controls1 cpicker . debug'

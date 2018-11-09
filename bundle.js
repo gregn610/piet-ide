@@ -18,7 +18,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var ColourPicker = function ColourPicker(props) {
   return _react2.default.createElement(
     'div',
-    { style: { width: 480 } },
+    {
+      style: {
+        gridColumn: 'cpicker',
+        gridRow: '1 / 4',
+        position: 'relative',
+        top: -5
+      }
+    },
     _react2.default.createElement(
       'div',
       null,
@@ -1464,7 +1471,7 @@ var App = function (_React$Component) {
             display: 'grid',
             gridColumnGap: '1vw',
             gridRowGap: '1vh',
-            gridTemplateColumns: this.props.appState.debug.debugIsVisible ? '375px 300px auto 225px' : '375px 300px auto 25px',
+            gridTemplateColumns: this.props.appState.debug.debugIsVisible ? '375px 500px auto 225px' : '375px 500px auto 25px',
             gridTemplateRows: '35px 35px 35px auto',
             gridTemplateAreas: this.props.appState.debug.debugIsVisible ? '\'controls1 cpicker . debug\'\n                           \'controls2 cpicker . debug\'\n                           \'controls3 cpicker . debug\'\n                           \'grid grid grid debug\'' : '\'controls1 cpicker . dtab\'\n                           \'controls2 cpicker . dtab\'\n                           \'controls3 cpicker . dtab\'\n\t\t\t   \'grid grid grid grid\'',
             alignItems: 'center'

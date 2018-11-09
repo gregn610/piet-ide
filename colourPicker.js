@@ -2,7 +2,14 @@ import React from 'react';
 import { colours, WHITE, BLACK } from './colours.js';
 
 const ColourPicker = props => (
-  <div style={{ width: 480 }}>
+  <div
+    style={{
+      gridColumn: 'cpicker',
+      gridRow: '1 / 4',
+      position: 'relative',
+      top: -5
+    }}
+  >
     <div>
       {[colours.slice(0, 6), colours.slice(6, 12), colours.slice(12, 18)].map(
         (colourRow, i) => (
