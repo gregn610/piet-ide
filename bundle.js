@@ -2,7 +2,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -16,55 +16,60 @@ var _colours = require('./colours.js');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ColourPicker = function ColourPicker(props) {
-    return _react2.default.createElement(
-        'table',
-        { style: { gridColumn: 'cpicker', gridRow: '1 / 4' } },
-        _react2.default.createElement(
-            'tbody',
-            null,
-            [_colours.colours.slice(0, 6), _colours.colours.slice(6, 12), _colours.colours.slice(12, 18)].map(function (colourRow, i) {
-                return _react2.default.createElement(
-                    'tr',
-                    { key: 'colour-row-' + i },
-                    colourRow.map(function (colour, j) {
-                        return _react2.default.createElement(ColourCell, _extends({
-                            key: 'colour-cell-' + i + '-' + j,
-                            cellColour: i * 6 + j
-                        }, props));
-                    })
-                );
-            }),
-            _react2.default.createElement(
-                'tr',
-                null,
-                _react2.default.createElement(ColourCell, _extends({ colSpan: '3', cellColour: _colours.WHITE }, props)),
-                _react2.default.createElement(ColourCell, _extends({ colSpan: '3', cellColour: _colours.BLACK }, props))
-            )
-        )
-    );
+  return _react2.default.createElement(
+    'div',
+    { style: { width: 480 } },
+    _react2.default.createElement(
+      'div',
+      null,
+      [_colours.colours.slice(0, 6), _colours.colours.slice(6, 12), _colours.colours.slice(12, 18)].map(function (colourRow, i) {
+        return _react2.default.createElement(
+          'div',
+          {
+            style: { display: 'flex', width: '100%' },
+            key: 'colour-row-' + i
+          },
+          colourRow.map(function (colour, j) {
+            return _react2.default.createElement(ColourCell, _extends({
+              key: 'colour-cell-' + i + '-' + j,
+              cellColour: i * 6 + j
+            }, props));
+          })
+        );
+      }),
+      _react2.default.createElement(
+        'div',
+        { style: { display: 'flex', width: '100%' } },
+        _react2.default.createElement(ColourCell, _extends({ cellColour: _colours.WHITE }, props)),
+        _react2.default.createElement(ColourCell, _extends({ cellColour: _colours.BLACK }, props))
+      )
+    )
+  );
 };
 
 var ColourCell = function ColourCell(props) {
-    return _react2.default.createElement(
-        'td',
-        {
-            colSpan: props.colSpan ? props.colSpan : '1',
-            style: {
-                width: '32px',
-                height: '32px',
-                padding: '5px',
-                backgroundColor: _colours.colours[props.cellColour],
-                border: props.selectedColour == props.cellColour ? '4px double black' : '1px solid black',
-                color: 'white',
-                textShadow: '1px 1px 1px black',
-                textAlign: 'center',
-                cursor: 'pointer'
-            },
-            onClick: function onClick() {
-                return props.selectColour(props.cellColour);
-            } },
-        props.commands[props.cellColour]
-    );
+  return _react2.default.createElement(
+    'div',
+    {
+      colSpan: props.colSpan ? props.colSpan : '1',
+      style: {
+        'box-sizing': 'border-box',
+        height: '32px',
+        padding: '5px',
+        backgroundColor: _colours.colours[props.cellColour],
+        border: props.selectedColour == props.cellColour ? '2px solid white' : '2px solid black',
+        color: 'white',
+        textAlign: 'center',
+        textShadow: '1px 1px 1px black',
+        cursor: 'pointer',
+        flex: 1
+      },
+      onClick: function onClick() {
+        return props.selectColour(props.cellColour);
+      }
+    },
+    props.commands[props.cellColour]
+  );
 };
 
 exports.default = ColourPicker;
