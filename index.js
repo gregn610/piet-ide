@@ -531,6 +531,7 @@ const appState = {
       }
 
       // call generator and update state of debugger at interval
+      clearTimeout(appState.debug.runner);
       appState.debug.runner = window.setInterval(
         updateDebugger,
         appState.debug.runSpeed

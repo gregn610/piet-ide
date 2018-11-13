@@ -612,9 +612,7 @@ var DebugControls = function DebugControls(_ref2) {
           type: 'button',
           className: 'btn btn-success',
           title: 'Run from the beginning',
-          onClick: function onClick() {
-            return start();
-          }
+          onClick: start
         },
         _react2.default.createElement('i', { className: 'glyphicon glyphicon-play' })
       )
@@ -1423,6 +1421,7 @@ var appState = {
       }
 
       // call generator and update state of debugger at interval
+      clearTimeout(appState.debug.runner);
       appState.debug.runner = window.setInterval(updateDebugger, appState.debug.runSpeed);
     }.bind(undefined),
 

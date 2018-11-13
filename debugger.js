@@ -119,10 +119,9 @@ const Commands = ({
     <br />
     <div style={{ height: 24 }}>
       {currCommand && currCommand.inst && currCommand.inst.toUpperCase()}
-      {currCommand &&
-        currCommand.error && (
-          <div style={{ color: 'red' }}>{currCommand.error}</div>
-        )}
+      {currCommand && currCommand.error && (
+        <div style={{ color: 'red' }}>{currCommand.error}</div>
+      )}
     </div>
   </div>
 ];
@@ -149,7 +148,7 @@ const DebugControls = ({
         type="button"
         className="btn btn-success"
         title="Run from the beginning"
-        onClick={() => start()}
+        onClick={start}
       >
         <i className="glyphicon glyphicon-play" />
       </button>
