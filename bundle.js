@@ -318,7 +318,7 @@ var PaintModeSwitch = function PaintModeSwitch(_ref2) {
       {
         type: 'button',
         title: 'Brush mode (fill single pixel)',
-        className: 'btn btn-default' + (paintMode == 'BRUSH' ? 'active' : ''),
+        className: 'btn btn-default ' + (paintMode == 'BRUSH' ? 'active' : ''),
         style: { padding: '2px 12px' },
         onClick: function onClick() {
           return selectPaintMode('BRUSH');
@@ -331,7 +331,7 @@ var PaintModeSwitch = function PaintModeSwitch(_ref2) {
       {
         type: 'button',
         title: 'Bucket mode (fill block of pixels)',
-        className: 'btn btn-default' + (paintMode == 'BUCKET' ? 'active' : ''),
+        className: 'btn btn-default ' + (paintMode == 'BUCKET' ? 'active' : ''),
         style: { padding: '2px 12px' },
         onClick: function onClick() {
           return selectPaintMode('BUCKET');

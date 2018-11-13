@@ -139,7 +139,7 @@ const PaintModeSwitch = ({ paintMode, selectPaintMode }) => (
     <button
       type="button"
       title="Brush mode (fill single pixel)"
-      className={'btn btn-default' + (paintMode == 'BRUSH' ? 'active' : '')}
+      className={'btn btn-default ' + (paintMode == 'BRUSH' ? 'active' : '')}
       style={{ padding: '2px 12px' }}
       onClick={() => selectPaintMode('BRUSH')}
     >
@@ -148,7 +148,7 @@ const PaintModeSwitch = ({ paintMode, selectPaintMode }) => (
     <button
       type="button"
       title="Bucket mode (fill block of pixels)"
-      className={'btn btn-default' + (paintMode == 'BUCKET' ? 'active' : '')}
+      className={'btn btn-default ' + (paintMode == 'BUCKET' ? 'active' : '')}
       style={{ padding: '2px 12px' }}
       onClick={() => selectPaintMode('BUCKET')}
     >
