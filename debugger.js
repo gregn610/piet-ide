@@ -225,22 +225,6 @@ const DebugControls = ({
 
 // IO visual containers
 const IO = ({ output, isInterpreting }) => [
-  <b key="input-label">Input</b>,
-  <br key="br-1" />,
-  <textarea
-    key="in"
-    id="in"
-    placeholder="Enter input before running program"
-    title="Tip: Whitespace before a numerical value is ignored"
-    readOnly={isInterpreting}
-    style={{
-      width: '100%',
-      maxWidth: '100%',
-      fontFamily: 'monospace',
-      fontSize: '12pt'
-    }}
-  />,
-  <br key="br-2" />,
   <b key="output-label">Output</b>,
   <br key="br-3" />,
   <textarea
@@ -251,7 +235,8 @@ const IO = ({ output, isInterpreting }) => [
       width: '100%',
       maxWidth: '100%',
       fontFamily: 'monospace',
-      fontSize: '12pt'
+      fontSize: '12pt',
+      border: 0
     }}
     value={output}
   />

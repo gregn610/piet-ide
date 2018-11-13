@@ -381,12 +381,11 @@ const appState = {
       appState.debug.CC = 0;
       appState.debug.stack = [];
       appState.debug.output = '';
-      appState.debug.inputPtr = 0;
       appState.debug.block = null;
       appState.debug.currCommand = null;
       appState.debug.interpreter = null;
 
-      appState.debug.receiveInput(); // grab input
+      // appState.debug.receiveInput(); // grab input
       appState.notify();
 
       // create generator
@@ -399,54 +398,24 @@ const appState = {
       );
     }).bind(this),
 
-    // get the current value of the input
-    receiveInput: (() => {
-      appState.debug.input = document.getElementById('in').value;
-    }).bind(this),
-
     // get one input number (could be multiple characters) from "input stream"
     // (then increment pointer into stream)
     getInputNum: (() => {
-      // insufficient number of chars in input stream
-      if (appState.debug.input.length < appState.debug.inputPtr) {
-        return null;
+      const num = window.prompt('Please enter a number', '');
+      if (isNaN(num)) {
+        return 0;
       }
-
-      // discard leading whitespace (this allows multiple numbers to be entered
-      // consecutively, separated by whitespace)
-      for (
-        var c = appState.debug.input[appState.debug.inputPtr];
-        appState.debug.inputPtr < appState.debug.input.length && /\s/.test(c);
-        c = appState.debug.input[++appState.debug.inputPtr]
-      );
-
-      // grab next consecutive digits
-      let num = '';
-      for (
-        var c = appState.debug.input[appState.debug.inputPtr];
-        appState.debug.inputPtr < appState.debug.input.length &&
-        /[0-9]/.test(c);
-        c = appState.debug.input[++appState.debug.inputPtr]
-      ) {
-        num += c;
-      }
-
-      // input is not an integer value
-      if (num.length == 0) {
-        return null;
-      }
-
       return parseInt(num);
     }).bind(this),
 
     // get one input character from "input stream" (then increment pointer into stream)
     getInputChar: (() => {
-      // insufficient number of chars in input stream
-      if (appState.debug.input.length < appState.debug.inputPtr) {
-        return null;
-      }
+      const chars = window.prompt('Please enter a char', '');
 
-      return appState.debug.input[appState.debug.inputPtr++];
+      if (chars) {
+        return chars[0];
+      }
+      return null;
     }).bind(this),
 
     // toggle the paint mode between BP and not BP

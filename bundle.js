@@ -696,22 +696,6 @@ var IO = function IO(_ref3) {
       isInterpreting = _ref3.isInterpreting;
   return [_react2.default.createElement(
     'b',
-    { key: 'input-label' },
-    'Input'
-  ), _react2.default.createElement('br', { key: 'br-1' }), _react2.default.createElement('textarea', {
-    key: 'in',
-    id: 'in',
-    placeholder: 'Enter input before running program',
-    title: 'Tip: Whitespace before a numerical value is ignored',
-    readOnly: isInterpreting,
-    style: {
-      width: '100%',
-      maxWidth: '100%',
-      fontFamily: 'monospace',
-      fontSize: '12pt'
-    }
-  }), _react2.default.createElement('br', { key: 'br-2' }), _react2.default.createElement(
-    'b',
     { key: 'output-label' },
     'Output'
   ), _react2.default.createElement('br', { key: 'br-3' }), _react2.default.createElement('textarea', {
@@ -722,7 +706,8 @@ var IO = function IO(_ref3) {
       width: '100%',
       maxWidth: '100%',
       fontFamily: 'monospace',
-      fontSize: '12pt'
+      fontSize: '12pt',
+      border: 0
     },
     value: output
   })];
@@ -1286,57 +1271,35 @@ var appState = {
       appState.debug.CC = 0;
       appState.debug.stack = [];
       appState.debug.output = '';
-      appState.debug.inputPtr = 0;
       appState.debug.block = null;
       appState.debug.currCommand = null;
       appState.debug.interpreter = null;
 
-      appState.debug.receiveInput(); // grab input
+      // appState.debug.receiveInput(); // grab input
       appState.notify();
 
       // create generator
       appState.debug.interpreter = (0, _interpreter2.default)(appState.grid, appState.blocks, appState.blockSizes, appState.debug.getInputNum, appState.debug.getInputChar);
     }.bind(undefined),
 
-    // get the current value of the input
-    receiveInput: function () {
-      appState.debug.input = document.getElementById('in').value;
-    }.bind(undefined),
-
     // get one input number (could be multiple characters) from "input stream"
     // (then increment pointer into stream)
     getInputNum: function () {
-      // insufficient number of chars in input stream
-      if (appState.debug.input.length < appState.debug.inputPtr) {
-        return null;
+      var num = window.prompt('Please enter a number', '');
+      if (isNaN(num)) {
+        return 0;
       }
-
-      // discard leading whitespace (this allows multiple numbers to be entered
-      // consecutively, separated by whitespace)
-      for (var c = appState.debug.input[appState.debug.inputPtr]; appState.debug.inputPtr < appState.debug.input.length && /\s/.test(c); c = appState.debug.input[++appState.debug.inputPtr]) {}
-
-      // grab next consecutive digits
-      var num = '';
-      for (var c = appState.debug.input[appState.debug.inputPtr]; appState.debug.inputPtr < appState.debug.input.length && /[0-9]/.test(c); c = appState.debug.input[++appState.debug.inputPtr]) {
-        num += c;
-      }
-
-      // input is not an integer value
-      if (num.length == 0) {
-        return null;
-      }
-
       return parseInt(num);
     }.bind(undefined),
 
     // get one input character from "input stream" (then increment pointer into stream)
     getInputChar: function () {
-      // insufficient number of chars in input stream
-      if (appState.debug.input.length < appState.debug.inputPtr) {
-        return null;
-      }
+      var chars = window.prompt('Please enter a char', '');
 
-      return appState.debug.input[appState.debug.inputPtr++];
+      if (chars) {
+        return chars[0];
+      }
+      return null;
     }.bind(undefined),
 
     // toggle the paint mode between BP and not BP
