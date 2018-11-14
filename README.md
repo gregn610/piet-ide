@@ -12,7 +12,6 @@ An in-browser platform for developing in the esoteric programming language [Piet
 #### Import / export
 
 - Import a PNG, JPG, or BMP file containing a Piet program
-- **[In progress]** Import a Piet program from a photo of a physical representation of the program (eg. a painting or print-out)
 - Export a Piet program from the IDE to a PNG file
   - Export a Piet program at a larger scale so that the details are easily visible
 
@@ -28,7 +27,6 @@ An in-browser platform for developing in the esoteric programming language [Piet
 - Run the program, with controls to:
   - run from the beginning
   - pause
-  - step
   - continue
   - stop
 - Visualize the current state of the stack, Direction Pointer, Codel Chooser, and output, as the program is running

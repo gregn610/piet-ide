@@ -313,9 +313,7 @@ var ImportExportMenu = function ImportExportMenu(_ref) {
         style: { flex: 1 },
         type: 'button',
         className: 'btn btn-default',
-        onClick: function onClick() {
-          return exportPng(1);
-        }
+        onClick: exportPng
       },
       'Export to PNG'
     )
@@ -1199,7 +1197,7 @@ var appState = {
     appState.notify();
   }.bind(undefined),
 
-  exportPng: function (scale) {
+  exportPng: function () {
     // create a new image
     var image = new Jimp(appState.width, appState.height);
 
@@ -1212,6 +1210,13 @@ var appState = {
     image.scan(0, 0, appState.width, appState.height, function (x, y) {
       image.setPixelColour(colourMap[appState.grid[y][x]], x, y);
     });
+
+    var scaleInput = window.prompt('Please enter scale size (default 1)', '1');
+
+    var scale = 1;
+    if (!isNaN(parseInt(scaleInput))) {
+      scale = parseInt(scaleInput);
+    }
 
     // scale the image
     image.resize(scale * appState.width, scale * appState.height, Jimp.RESIZE_NEAREST_NEIGHBOR);

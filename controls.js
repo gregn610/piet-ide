@@ -142,7 +142,7 @@ const ImportExportMenu = ({ isInterpreting, importImg, exportPng }) => (
       style={{ flex: 1 }}
       type="button"
       className="btn btn-default"
-      onClick={() => exportPng(1)}
+      onClick={exportPng}
     >
       Export to PNG
     </button>

@@ -202,7 +202,7 @@ const appState = {
     appState.notify();
   }).bind(this),
 
-  exportPng: (scale => {
+  exportPng: (() => {
     // create a new image
     let image = new Jimp(appState.width, appState.height);
 
@@ -213,6 +213,16 @@ const appState = {
     image.scan(0, 0, appState.width, appState.height, (x, y) => {
       image.setPixelColour(colourMap[appState.grid[y][x]], x, y);
     });
+
+    const scaleInput = window.prompt(
+      'Please enter scale size (default 1)',
+      '1'
+    );
+
+    let scale = 1;
+    if (!isNaN(parseInt(scaleInput))) {
+      scale = parseInt(scaleInput);
+    }
 
     // scale the image
     image.resize(
