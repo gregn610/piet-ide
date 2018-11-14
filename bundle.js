@@ -287,6 +287,7 @@ var ImportExportMenu = function ImportExportMenu(_ref) {
   }), _react2.default.createElement('input', {
     key: 'hidden-file-input',
     type: 'file',
+    id: 'fileChooser',
     accept: 'image/png, image/bmp, image/jpeg, image/gif',
     style: { display: 'none' },
     onChange: function onChange(event) {
@@ -1313,9 +1314,6 @@ var appState = {
     CC: 0, // index into [left, right], codel chooser initially points left
     stack: [],
     output: '',
-
-    input: '',
-    inputPtr: 0, // pointer into input stream
 
     block: null, // current block
     currCommand: null, // current command

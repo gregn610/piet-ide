@@ -118,6 +118,7 @@ const ImportExportMenu = ({ isInterpreting, importImg, exportPng }) => [
   <input
     key="hidden-file-input"
     type="file"
+    id="fileChooser"
     accept="image/png, image/bmp, image/jpeg, image/gif"
     style={{ display: 'none' }}
     onChange={event => {

@@ -355,9 +355,6 @@ const appState = {
     stack: [],
     output: '',
 
-    input: '',
-    inputPtr: 0, // pointer into input stream
-
     block: null, // current block
     currCommand: null, // current command
 
