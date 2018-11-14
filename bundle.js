@@ -81,7 +81,7 @@ var ColourCell = function ColourCell(props) {
 
 exports.default = ColourPicker;
 
-},{"./colours.js":2,"react":346}],2:[function(require,module,exports){
+},{"./colours.js":2,"react":347}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -377,7 +377,7 @@ var BSDisplaySwitch = function BSDisplaySwitch(_ref3) {
 
 exports.default = Controls;
 
-},{"./colourPicker.js":1,"react":346}],4:[function(require,module,exports){
+},{"./colourPicker.js":1,"react":347}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -417,7 +417,7 @@ var DebugTab = exports.DebugTab = function DebugTab(props) {
     );
 };
 
-},{"react":346}],5:[function(require,module,exports){
+},{"react":347}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -432,6 +432,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _path = require('path');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -441,19 +443,44 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 // main debugger component container
+
+var dragStartX = 0;
+var dragStartY = 0;
+var dragTimeout = null;
+
 var Debugger = function (_React$Component) {
   _inherits(Debugger, _React$Component);
 
   function Debugger() {
     _classCallCheck(this, Debugger);
 
+    // this.startPos = 0; // save the starting position of the debugger, for when it is dragged
     var _this = _possibleConstructorReturn(this, (Debugger.__proto__ || Object.getPrototypeOf(Debugger)).call(this));
 
-    _this.startPos = 0; // save the starting position of the debugger, for when it is dragged
+    _this.state = {
+      positionRight: 20,
+      positionTop: 20
+    };
     return _this;
   }
 
   _createClass(Debugger, [{
+    key: 'updatePos',
+    value: function (_updatePos) {
+      function updatePos() {
+        return _updatePos.apply(this, arguments);
+      }
+
+      updatePos.toString = function () {
+        return _updatePos.toString();
+      };
+
+      return updatePos;
+    }(function () {
+      //
+      updatePos;
+    })
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -463,15 +490,19 @@ var Debugger = function (_React$Component) {
         {
           id: 'debugger',
           style: {
-            gridColumn: 'debug',
-            gridRow: '1 / 5',
+            position: 'fixed',
             alignSelf: 'start',
             marginTop: '0',
             width: '225px',
+            height: 'auto',
             border: '1px solid #ddd',
             borderRadius: '5px',
             background: 'white',
-            pointerEvents: 'auto'
+            pointerEvents: 'auto',
+            zIndex: 100,
+            right: this.state.positionRight,
+            top: this.state.positionTop,
+            bottom: 20
           }
         },
         _react2.default.createElement(
@@ -483,16 +514,30 @@ var Debugger = function (_React$Component) {
               padding: '0 5px 5px',
               borderBottom: '1px solid #ddd',
               borderRadius: '5px 5px 0 0',
-              backgroundColor: '#eee',
-              cursor: 'ns-resize'
+              cursor: 'move',
+              background: '#f0f0f0'
             },
             onDragStart: function onDragStart(event) {
-              event.dataTransfer.setData('text/plain', '');
-              _this2.startPos = event.screenY;
+              dragStartX = event.clientX;
+              dragStartY = event.clientY;
             },
-            onDragEnd: function onDragEnd(event) {
-              var style = document.getElementById('debugger').style;
-              style.marginTop = 'calc(' + style.marginTop + ' + ' + event.screenY + 'px - ' + _this2.startPos + 'px )';
+            onDrag: function onDrag(event) {
+              clearTimeout(dragTimeout);
+              var currentX = event.clientX;
+              var currentY = event.clientY;
+              dragTimeout = setTimeout(function () {
+                var diffX = currentX - dragStartX;
+                var diffY = currentY - dragStartY;
+                dragStartX = currentX;
+                dragStartY = currentY;
+                if (currentX === 0 & currentY === 0) return;
+                var newPositionRight = Math.max(0, _this2.state.positionRight - diffX);
+                var newPositionTop = Math.max(0, _this2.state.positionTop + diffY);
+                _this2.setState({
+                  positionRight: newPositionRight,
+                  positionTop: newPositionTop
+                });
+              }, 4);
             }
           },
           _react2.default.createElement(
@@ -546,8 +591,9 @@ var Commands = function Commands(_ref) {
         overflow: 'auto',
         fontFamily: 'monospace',
         fontSize: '11pt',
-        backgroundColor: '#f5f5f5',
-        border: '1px solid #ccc'
+        backgroundColor: '#fff',
+        border: '1px solid #ddd',
+        borderRadius: 5
       }
     },
     commandList.map(function (command, i) {
@@ -587,7 +633,7 @@ var Commands = function Commands(_ref) {
     _react2.default.createElement('br', null),
     _react2.default.createElement(
       'div',
-      { style: { height: 24 } },
+      { style: { height: 40 } },
       currCommand && currCommand.inst && currCommand.inst.toUpperCase(),
       currCommand && currCommand.error && _react2.default.createElement(
         'div',
@@ -705,25 +751,34 @@ var DebugControls = function DebugControls(_ref2) {
 
 // IO visual containers
 var IO = function IO(_ref3) {
-  var output = _ref3.output,
-      isInterpreting = _ref3.isInterpreting;
-  return [_react2.default.createElement(
-    'b',
-    { key: 'output-label' },
-    'Output'
-  ), _react2.default.createElement('br', { key: 'br-3' }), _react2.default.createElement('textarea', {
-    key: 'out',
-    id: 'out',
-    readOnly: true,
-    style: {
-      width: '100%',
-      maxWidth: '100%',
-      fontFamily: 'monospace',
-      fontSize: '12pt',
-      border: 0
-    },
-    value: output
-  })];
+  var output = _ref3.output;
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'b',
+        null,
+        'Output'
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      {
+        readOnly: true,
+        style: {
+          width: '100%',
+          maxWidth: '100%',
+          fontFamily: 'monospace',
+          fontSize: '12pt',
+          border: 0
+        }
+      },
+      output
+    )
+  );
 };
 
 // visual representation of stack
@@ -797,7 +852,7 @@ var Pointers = function Pointers(_ref5) {
 
 exports.default = Debugger;
 
-},{"react":346}],6:[function(require,module,exports){
+},{"path":338,"react":347}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -873,7 +928,7 @@ var Grid = function Grid(props) {
 
 exports.default = Grid;
 
-},{"./colours.js":2,"react":346}],7:[function(require,module,exports){
+},{"./colours.js":2,"react":347}],7:[function(require,module,exports){
 (function (Buffer){
 'use strict';
 
@@ -1467,7 +1522,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 }).call(this,require("buffer").Buffer)
-},{"./colours.js":2,"./controls.js":3,"./debugTab.js":4,"./debugger.js":5,"./grid.js":6,"./interpreter.js":8,"./orderedCommands.js":354,"babel-polyfill":9,"buffer":11,"react":346,"react-dom":343}],8:[function(require,module,exports){
+},{"./colours.js":2,"./controls.js":3,"./debugTab.js":4,"./debugger.js":5,"./grid.js":6,"./interpreter.js":8,"./orderedCommands.js":355,"babel-polyfill":9,"buffer":11,"react":347,"react-dom":344}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2268,7 +2323,7 @@ function interpret(grid, blocks, blockSizes, getInputNum, getInputChar) {
 
 exports.default = interpret;
 
-},{"./colours.js":2,"./orderedCommands.js":354}],9:[function(require,module,exports){
+},{"./colours.js":2,"./orderedCommands.js":355}],9:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -2299,7 +2354,7 @@ define(String.prototype, "padRight", "".padEnd);
   [][key] && define(Array, key, Function.call.bind([][key]));
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"core-js/fn/regexp/escape":12,"core-js/shim":335,"regenerator-runtime/runtime":347}],10:[function(require,module,exports){
+},{"core-js/fn/regexp/escape":12,"core-js/shim":335,"regenerator-runtime/runtime":348}],10:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -11188,6 +11243,312 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 };
 
 },{}],338:[function(require,module,exports){
+(function (process){
+// .dirname, .basename, and .extname methods are extracted from Node.js v8.11.1,
+// backported and transplited with Babel, with backwards-compat fixes
+
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// resolves . and .. elements in a path array with directory names there
+// must be no slashes, empty elements, or device names (c:\) in the array
+// (so also no leading and trailing slashes - it does not distinguish
+// relative and absolute paths)
+function normalizeArray(parts, allowAboveRoot) {
+  // if the path tries to go above the root, `up` ends up > 0
+  var up = 0;
+  for (var i = parts.length - 1; i >= 0; i--) {
+    var last = parts[i];
+    if (last === '.') {
+      parts.splice(i, 1);
+    } else if (last === '..') {
+      parts.splice(i, 1);
+      up++;
+    } else if (up) {
+      parts.splice(i, 1);
+      up--;
+    }
+  }
+
+  // if the path is allowed to go above the root, restore leading ..s
+  if (allowAboveRoot) {
+    for (; up--; up) {
+      parts.unshift('..');
+    }
+  }
+
+  return parts;
+}
+
+// path.resolve([from ...], to)
+// posix version
+exports.resolve = function() {
+  var resolvedPath = '',
+      resolvedAbsolute = false;
+
+  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+    var path = (i >= 0) ? arguments[i] : process.cwd();
+
+    // Skip empty and invalid entries
+    if (typeof path !== 'string') {
+      throw new TypeError('Arguments to path.resolve must be strings');
+    } else if (!path) {
+      continue;
+    }
+
+    resolvedPath = path + '/' + resolvedPath;
+    resolvedAbsolute = path.charAt(0) === '/';
+  }
+
+  // At this point the path should be resolved to a full absolute path, but
+  // handle relative paths to be safe (might happen when process.cwd() fails)
+
+  // Normalize the path
+  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
+    return !!p;
+  }), !resolvedAbsolute).join('/');
+
+  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
+};
+
+// path.normalize(path)
+// posix version
+exports.normalize = function(path) {
+  var isAbsolute = exports.isAbsolute(path),
+      trailingSlash = substr(path, -1) === '/';
+
+  // Normalize the path
+  path = normalizeArray(filter(path.split('/'), function(p) {
+    return !!p;
+  }), !isAbsolute).join('/');
+
+  if (!path && !isAbsolute) {
+    path = '.';
+  }
+  if (path && trailingSlash) {
+    path += '/';
+  }
+
+  return (isAbsolute ? '/' : '') + path;
+};
+
+// posix version
+exports.isAbsolute = function(path) {
+  return path.charAt(0) === '/';
+};
+
+// posix version
+exports.join = function() {
+  var paths = Array.prototype.slice.call(arguments, 0);
+  return exports.normalize(filter(paths, function(p, index) {
+    if (typeof p !== 'string') {
+      throw new TypeError('Arguments to path.join must be strings');
+    }
+    return p;
+  }).join('/'));
+};
+
+
+// path.relative(from, to)
+// posix version
+exports.relative = function(from, to) {
+  from = exports.resolve(from).substr(1);
+  to = exports.resolve(to).substr(1);
+
+  function trim(arr) {
+    var start = 0;
+    for (; start < arr.length; start++) {
+      if (arr[start] !== '') break;
+    }
+
+    var end = arr.length - 1;
+    for (; end >= 0; end--) {
+      if (arr[end] !== '') break;
+    }
+
+    if (start > end) return [];
+    return arr.slice(start, end - start + 1);
+  }
+
+  var fromParts = trim(from.split('/'));
+  var toParts = trim(to.split('/'));
+
+  var length = Math.min(fromParts.length, toParts.length);
+  var samePartsLength = length;
+  for (var i = 0; i < length; i++) {
+    if (fromParts[i] !== toParts[i]) {
+      samePartsLength = i;
+      break;
+    }
+  }
+
+  var outputParts = [];
+  for (var i = samePartsLength; i < fromParts.length; i++) {
+    outputParts.push('..');
+  }
+
+  outputParts = outputParts.concat(toParts.slice(samePartsLength));
+
+  return outputParts.join('/');
+};
+
+exports.sep = '/';
+exports.delimiter = ':';
+
+exports.dirname = function (path) {
+  if (typeof path !== 'string') path = path + '';
+  if (path.length === 0) return '.';
+  var code = path.charCodeAt(0);
+  var hasRoot = code === 47 /*/*/;
+  var end = -1;
+  var matchedSlash = true;
+  for (var i = path.length - 1; i >= 1; --i) {
+    code = path.charCodeAt(i);
+    if (code === 47 /*/*/) {
+        if (!matchedSlash) {
+          end = i;
+          break;
+        }
+      } else {
+      // We saw the first non-path separator
+      matchedSlash = false;
+    }
+  }
+
+  if (end === -1) return hasRoot ? '/' : '.';
+  if (hasRoot && end === 1) {
+    // return '//';
+    // Backwards-compat fix:
+    return '/';
+  }
+  return path.slice(0, end);
+};
+
+function basename(path) {
+  if (typeof path !== 'string') path = path + '';
+
+  var start = 0;
+  var end = -1;
+  var matchedSlash = true;
+  var i;
+
+  for (i = path.length - 1; i >= 0; --i) {
+    if (path.charCodeAt(i) === 47 /*/*/) {
+        // If we reached a path separator that was not part of a set of path
+        // separators at the end of the string, stop now
+        if (!matchedSlash) {
+          start = i + 1;
+          break;
+        }
+      } else if (end === -1) {
+      // We saw the first non-path separator, mark this as the end of our
+      // path component
+      matchedSlash = false;
+      end = i + 1;
+    }
+  }
+
+  if (end === -1) return '';
+  return path.slice(start, end);
+}
+
+// Uses a mixed approach for backwards-compatibility, as ext behavior changed
+// in new Node.js versions, so only basename() above is backported here
+exports.basename = function (path, ext) {
+  var f = basename(path);
+  if (ext && f.substr(-1 * ext.length) === ext) {
+    f = f.substr(0, f.length - ext.length);
+  }
+  return f;
+};
+
+exports.extname = function (path) {
+  if (typeof path !== 'string') path = path + '';
+  var startDot = -1;
+  var startPart = 0;
+  var end = -1;
+  var matchedSlash = true;
+  // Track the state of characters (if any) we see before our first dot and
+  // after any path separator we find
+  var preDotState = 0;
+  for (var i = path.length - 1; i >= 0; --i) {
+    var code = path.charCodeAt(i);
+    if (code === 47 /*/*/) {
+        // If we reached a path separator that was not part of a set of path
+        // separators at the end of the string, stop now
+        if (!matchedSlash) {
+          startPart = i + 1;
+          break;
+        }
+        continue;
+      }
+    if (end === -1) {
+      // We saw the first non-path separator, mark this as the end of our
+      // extension
+      matchedSlash = false;
+      end = i + 1;
+    }
+    if (code === 46 /*.*/) {
+        // If this is our first dot, mark it as the start of our extension
+        if (startDot === -1)
+          startDot = i;
+        else if (preDotState !== 1)
+          preDotState = 1;
+    } else if (startDot !== -1) {
+      // We saw a non-dot and non-path separator before our dot, so we should
+      // have a good chance at having a non-empty extension
+      preDotState = -1;
+    }
+  }
+
+  if (startDot === -1 || end === -1 ||
+      // We saw a non-dot character immediately before the dot
+      preDotState === 0 ||
+      // The (right-most) trimmed path component is exactly '..'
+      preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
+    return '';
+  }
+  return path.slice(startDot, end);
+};
+
+function filter (xs, f) {
+    if (xs.filter) return xs.filter(f);
+    var res = [];
+    for (var i = 0; i < xs.length; i++) {
+        if (f(xs[i], i, xs)) res.push(xs[i]);
+    }
+    return res;
+}
+
+// String.prototype.substr - negative index don't work in IE8
+var substr = 'ab'.substr(-1) === 'b'
+    ? function (str, start, len) { return str.substr(start, len) }
+    : function (str, start, len) {
+        if (start < 0) start = str.length + start;
+        return str.substr(start, len);
+    }
+;
+
+}).call(this,require('_process'))
+},{"_process":339}],339:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -11373,7 +11734,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],339:[function(require,module,exports){
+},{}],340:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -11468,7 +11829,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
-},{"./lib/ReactPropTypesSecret":340,"_process":338}],340:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":341,"_process":339}],341:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -11482,7 +11843,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],341:[function(require,module,exports){
+},{}],342:[function(require,module,exports){
 (function (process){
 /** @license React v16.6.0
  * react-dom.development.js
@@ -30376,7 +30737,7 @@ module.exports = reactDom;
 }
 
 }).call(this,require('_process'))
-},{"_process":338,"object-assign":337,"prop-types/checkPropTypes":339,"react":346,"scheduler":352,"scheduler/tracing":353}],342:[function(require,module,exports){
+},{"_process":339,"object-assign":337,"prop-types/checkPropTypes":340,"react":347,"scheduler":353,"scheduler/tracing":354}],343:[function(require,module,exports){
 /** @license React v16.6.0
  * react-dom.production.min.js
  *
@@ -30628,7 +30989,7 @@ void 0:r("40");return a._reactRootContainer?(Ji(function(){Wi(null,null,a,!1,fun
 Pa,Qa,Ga.injectEventPluginsByName,sa,Wa,function(a){Ba(a,Va)},Wb,Xb,ee,Ia]},unstable_createRoot:function(a,b){Ui(a)?void 0:r("278");return new Ti(a,!0,null!=b&&!0===b.hydrate)}};(function(a){var b=a.findFiberByHostInstance;return Cf(n({},a,{findHostInstanceByFiber:function(a){a=Jd(a);return null===a?null:a.stateNode},findFiberByHostInstance:function(a){return b?b(a):null}}))})({findFiberByHostInstance:Na,bundleType:0,version:"16.6.0",rendererPackageName:"react-dom"});
 var mj={default:Yi},nj=mj&&Yi||mj;module.exports=nj.default||nj;
 
-},{"object-assign":337,"react":346,"scheduler":352}],343:[function(require,module,exports){
+},{"object-assign":337,"react":347,"scheduler":353}],344:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -30670,7 +31031,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react-dom.development.js":341,"./cjs/react-dom.production.min.js":342,"_process":338}],344:[function(require,module,exports){
+},{"./cjs/react-dom.development.js":342,"./cjs/react-dom.production.min.js":343,"_process":339}],345:[function(require,module,exports){
 (function (process){
 /** @license React v16.6.0
  * react.development.js
@@ -32414,7 +32775,7 @@ module.exports = react;
 }
 
 }).call(this,require('_process'))
-},{"_process":338,"object-assign":337,"prop-types/checkPropTypes":339}],345:[function(require,module,exports){
+},{"_process":339,"object-assign":337,"prop-types/checkPropTypes":340}],346:[function(require,module,exports){
 /** @license React v16.6.0
  * react.production.min.js
  *
@@ -32440,7 +32801,7 @@ _currentValue:a,_currentValue2:a,Provider:null,Consumer:null};a.Provider={$$type
 g=a.key,h=a.ref,f=a._owner;if(null!=b){void 0!==b.ref&&(h=b.ref,f=K.current);void 0!==b.key&&(g=""+b.key);var l=void 0;a.type&&a.type.defaultProps&&(l=a.type.defaultProps);for(c in b)L.call(b,c)&&!M.hasOwnProperty(c)&&(d[c]=void 0===b[c]&&void 0!==l?l[c]:b[c])}c=arguments.length-2;if(1===c)d.children=e;else if(1<c){l=Array(c);for(var m=0;m<c;m++)l[m]=arguments[m+2];d.children=l}return{$$typeof:p,type:a.type,key:g,ref:h,props:d,_owner:f}},createFactory:function(a){var b=N.bind(null,a);b.type=a;return b},
 isValidElement:O,version:"16.6.0",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurrentOwner:K,assign:k}},Y={default:X},Z=Y&&X||Y;module.exports=Z.default||Z;
 
-},{"object-assign":337}],346:[function(require,module,exports){
+},{"object-assign":337}],347:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -32451,7 +32812,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react.development.js":344,"./cjs/react.production.min.js":345,"_process":338}],347:[function(require,module,exports){
+},{"./cjs/react.development.js":345,"./cjs/react.production.min.js":346,"_process":339}],348:[function(require,module,exports){
 (function (global){
 /**
  * Copyright (c) 2014, Facebook, Inc.
@@ -33191,7 +33552,7 @@ if (process.env.NODE_ENV === 'production') {
 );
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],348:[function(require,module,exports){
+},{}],349:[function(require,module,exports){
 (function (process){
 /** @license React v16.6.0
  * scheduler-tracing.development.js
@@ -33611,7 +33972,7 @@ exports.unstable_unsubscribe = unstable_unsubscribe;
 }
 
 }).call(this,require('_process'))
-},{"_process":338}],349:[function(require,module,exports){
+},{"_process":339}],350:[function(require,module,exports){
 /** @license React v16.6.0
  * scheduler-tracing.production.min.js
  *
@@ -33623,7 +33984,7 @@ exports.unstable_unsubscribe = unstable_unsubscribe;
 
 'use strict';Object.defineProperty(exports,"__esModule",{value:!0});var b=0;exports.__interactionsRef=null;exports.__subscriberRef=null;exports.unstable_clear=function(a){return a()};exports.unstable_getCurrent=function(){return null};exports.unstable_getThreadID=function(){return++b};exports.unstable_trace=function(a,d,c){return c()};exports.unstable_wrap=function(a){return a};exports.unstable_subscribe=function(){};exports.unstable_unsubscribe=function(){};
 
-},{}],350:[function(require,module,exports){
+},{}],351:[function(require,module,exports){
 (function (process){
 /** @license React v16.6.0
  * scheduler.development.js
@@ -34281,7 +34642,7 @@ exports.unstable_getCurrentPriorityLevel = unstable_getCurrentPriorityLevel;
 }
 
 }).call(this,require('_process'))
-},{"_process":338}],351:[function(require,module,exports){
+},{"_process":339}],352:[function(require,module,exports){
 /** @license React v16.6.0
  * scheduler.production.min.js
  *
@@ -34302,7 +34663,7 @@ exports.unstable_UserBlockingPriority=2;exports.unstable_NormalPriority=3;export
 exports.unstable_scheduleCallback=function(a,b){var d=-1!==h?h:exports.unstable_now();if("object"===typeof b&&null!==b&&"number"===typeof b.timeout)b=d+b.timeout;else switch(f){case 1:b=d+-1;break;case 2:b=d+250;break;case 4:b=d+1073741823;break;default:b=d+5E3}a={callback:a,priorityLevel:f,expirationTime:b,next:null,previous:null};if(null===c)c=a.next=a.previous=a,r();else{d=null;var e=c;do{if(e.expirationTime>b){d=e;break}e=e.next}while(e!==c);null===d?d=c:d===c&&(c=a,r());b=d.previous;b.next=d.previous=
 a;a.next=d;a.previous=b}return a};exports.unstable_cancelCallback=function(a){var b=a.next;if(null!==b){if(b===a)c=null;else{a===c&&(c=b);var d=a.previous;d.next=b;b.previous=d}a.next=a.previous=null}};exports.unstable_wrapCallback=function(a){var b=f;return function(){var d=f,e=h;f=b;h=exports.unstable_now();try{return a.apply(this,arguments)}finally{f=d,h=e,x()}}};exports.unstable_getCurrentPriorityLevel=function(){return f};
 
-},{}],352:[function(require,module,exports){
+},{}],353:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -34313,7 +34674,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/scheduler.development.js":350,"./cjs/scheduler.production.min.js":351,"_process":338}],353:[function(require,module,exports){
+},{"./cjs/scheduler.development.js":351,"./cjs/scheduler.production.min.js":352,"_process":339}],354:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -34324,7 +34685,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/scheduler-tracing.development.js":348,"./cjs/scheduler-tracing.production.min.js":349,"_process":338}],354:[function(require,module,exports){
+},{"./cjs/scheduler-tracing.development.js":349,"./cjs/scheduler-tracing.production.min.js":350,"_process":339}],355:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

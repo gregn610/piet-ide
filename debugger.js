@@ -1,10 +1,25 @@
 import React from 'react';
+import { normalize } from 'path';
 
 // main debugger component container
+
+let dragStartX = 0;
+let dragStartY = 0;
+let dragTimeout = null;
+
 class Debugger extends React.Component {
   constructor() {
     super();
-    this.startPos = 0; // save the starting position of the debugger, for when it is dragged
+    // this.startPos = 0; // save the starting position of the debugger, for when it is dragged
+    this.state = {
+      positionRight: 20,
+      positionTop: 20
+    };
+  }
+
+  updatePos() {
+    //
+    updatePos;
   }
 
   render() {
@@ -12,15 +27,19 @@ class Debugger extends React.Component {
       <div
         id="debugger"
         style={{
-          gridColumn: 'debug',
-          gridRow: '1 / 5',
+          position: 'fixed',
           alignSelf: 'start',
           marginTop: '0',
           width: '225px',
+          height: 'auto',
           border: '1px solid #ddd',
           borderRadius: '5px',
           background: 'white',
-          pointerEvents: 'auto'
+          pointerEvents: 'auto',
+          zIndex: 100,
+          right: this.state.positionRight,
+          top: this.state.positionTop,
+          bottom: 20
         }}
       >
         <div
@@ -30,18 +49,36 @@ class Debugger extends React.Component {
             padding: '0 5px 5px',
             borderBottom: '1px solid #ddd',
             borderRadius: '5px 5px 0 0',
-            backgroundColor: '#eee',
-            cursor: 'ns-resize'
+            cursor: 'move',
+            background: '#f0f0f0'
           }}
           onDragStart={event => {
-            event.dataTransfer.setData('text/plain', '');
-            this.startPos = event.screenY;
+            dragStartX = event.clientX;
+            dragStartY = event.clientY;
           }}
-          onDragEnd={event => {
-            var style = document.getElementById('debugger').style;
-            style.marginTop = `calc(${style.marginTop} + ${event.screenY}px - ${
-              this.startPos
-            }px )`;
+          onDrag={event => {
+            clearTimeout(dragTimeout);
+            const currentX = event.clientX;
+            const currentY = event.clientY;
+            dragTimeout = setTimeout(() => {
+              const diffX = currentX - dragStartX;
+              const diffY = currentY - dragStartY;
+              dragStartX = currentX;
+              dragStartY = currentY;
+              if ((currentX === 0) & (currentY === 0)) return;
+              const newPositionRight = Math.max(
+                0,
+                this.state.positionRight - diffX
+              );
+              const newPositionTop = Math.max(
+                0,
+                this.state.positionTop + diffY
+              );
+              this.setState({
+                positionRight: newPositionRight,
+                positionTop: newPositionTop
+              });
+            }, 4);
           }}
         >
           <button
@@ -82,8 +119,9 @@ const Commands = ({
       overflow: 'auto',
       fontFamily: 'monospace',
       fontSize: '11pt',
-      backgroundColor: '#f5f5f5',
-      border: '1px solid #ccc'
+      backgroundColor: '#fff',
+      border: '1px solid #ddd',
+      borderRadius: 5
     }}
   >
     {commandList.map((command, i) => (
@@ -117,7 +155,7 @@ const Commands = ({
   >
     Current command:
     <br />
-    <div style={{ height: 24 }}>
+    <div style={{ height: 40 }}>
       {currCommand && currCommand.inst && currCommand.inst.toUpperCase()}
       {currCommand && currCommand.error && (
         <div style={{ color: 'red' }}>{currCommand.error}</div>
@@ -224,23 +262,25 @@ const DebugControls = ({
 );
 
 // IO visual containers
-const IO = ({ output, isInterpreting }) => [
-  <b key="output-label">Output</b>,
-  <br key="br-3" />,
-  <textarea
-    key="out"
-    id="out"
-    readOnly
-    style={{
-      width: '100%',
-      maxWidth: '100%',
-      fontFamily: 'monospace',
-      fontSize: '12pt',
-      border: 0
-    }}
-    value={output}
-  />
-];
+const IO = ({ output }) => (
+  <div>
+    <div>
+      <b>Output</b>
+    </div>
+    <div
+      readOnly
+      style={{
+        width: '100%',
+        maxWidth: '100%',
+        fontFamily: 'monospace',
+        fontSize: '12pt',
+        border: 0
+      }}
+    >
+      {output}
+    </div>
+  </div>
+);
 
 // visual representation of stack
 const Stack = ({ stack }) => (
