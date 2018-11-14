@@ -12,26 +12,6 @@ import interpret from './interpreter.js';
 import { commands } from './orderedCommands.js';
 import { colours, WHITE, BLACK } from './colours.js';
 
-/* re-order commands to correspond to colours order based on currently-selected colour
- * NOTE: this was used to compute all command orders, which were saved to be re-used;
- * the function is no longer in use
-const mapCommandsToColours = baseColour => {
-    const rotateArray = (array, pivot) => array.slice(-pivot).concat(array.slice(0, -pivot));
-
-    let hShift = baseColour % 6;
-    let lShift = Math.floor(baseColour / 6);
-
-    let map = [
-        rotateArray(initCommands.slice(0, 6), hShift),
-        rotateArray(initCommands.slice(6, 12), hShift),
-        rotateArray(initCommands.slice(12), hShift),
-    ];
-
-    map = rotateArray(map, lShift);
-    return [...map[0], ...map[1], ...map[2]];
-};
-*/
-
 const HEIGHT = 10, // initial height
   WIDTH = 10; // initial width
 
@@ -524,6 +504,15 @@ const appState = {
 class App extends React.Component {
   componentDidMount() {
     this.props.appState.subscribe(this.forceUpdate.bind(this, null));
+    window.addEventListener('keypress', e => {
+      if (e.key === 'p') {
+        this.props.appState.selectPaintMode('BRUSH');
+      } else if (e.key === 'b') {
+        this.props.appState.selectPaintMode('BUCKET');
+      } else if (e.key === 's') {
+        this.props.appState.toggleDisplayBS();
+      }
+    });
   }
 
   render() {
@@ -533,24 +522,7 @@ class App extends React.Component {
       <div
         style={{
           width: '100%',
-          marginBottom: '1vh',
-          display: 'grid',
-          gridColumnGap: '1vw',
-          gridRowGap: '1vh',
-          gridTemplateColumns: this.props.appState.debug.debugIsVisible
-            ? '375px 500px auto 225px'
-            : '375px 500px auto 25px',
-          gridTemplateRows: '35px 35px 35px auto',
-          gridTemplateAreas: this.props.appState.debug.debugIsVisible
-            ? `'controls1 cpicker . debug'
-                           'controls2 cpicker . debug'
-                           'controls3 cpicker . debug'
-                           'grid grid grid debug'`
-            : `'controls1 cpicker . dtab'
-                           'controls2 cpicker . dtab'
-                           'controls3 cpicker . dtab'
-			   'grid grid grid grid'`,
-          alignItems: 'center'
+          marginBottom: '1vh'
         }}
       >
         <Controls isInterpreting={isInterpreting} {...this.props.appState} />

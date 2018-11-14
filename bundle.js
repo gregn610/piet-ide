@@ -18,38 +18,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var ColourPicker = function ColourPicker(props) {
   return _react2.default.createElement(
     'div',
-    {
-      style: {
-        gridColumn: 'cpicker',
-        gridRow: '1 / 4',
-        position: 'relative',
-        top: -5
-      }
-    },
+    null,
+    [_colours.colours.slice(0, 6), _colours.colours.slice(6, 12), _colours.colours.slice(12, 18)].map(function (colourRow, i) {
+      return _react2.default.createElement(
+        'div',
+        { style: { display: 'flex', width: '100%' }, key: 'colour-row-' + i },
+        colourRow.map(function (colour, j) {
+          return _react2.default.createElement(ColourCell, _extends({
+            key: 'colour-cell-' + i + '-' + j,
+            cellColour: i * 6 + j
+          }, props));
+        })
+      );
+    }),
     _react2.default.createElement(
       'div',
-      null,
-      [_colours.colours.slice(0, 6), _colours.colours.slice(6, 12), _colours.colours.slice(12, 18)].map(function (colourRow, i) {
-        return _react2.default.createElement(
-          'div',
-          {
-            style: { display: 'flex', width: '100%' },
-            key: 'colour-row-' + i
-          },
-          colourRow.map(function (colour, j) {
-            return _react2.default.createElement(ColourCell, _extends({
-              key: 'colour-cell-' + i + '-' + j,
-              cellColour: i * 6 + j
-            }, props));
-          })
-        );
-      }),
-      _react2.default.createElement(
-        'div',
-        { style: { display: 'flex', width: '100%' } },
-        _react2.default.createElement(ColourCell, _extends({ cellColour: _colours.WHITE }, props)),
-        _react2.default.createElement(ColourCell, _extends({ cellColour: _colours.BLACK }, props))
-      )
+      { style: { display: 'flex', width: '100%' } },
+      _react2.default.createElement(ColourCell, _extends({ cellColour: _colours.WHITE }, props)),
+      _react2.default.createElement(ColourCell, _extends({ cellColour: _colours.BLACK }, props))
     )
   );
 };
@@ -170,100 +156,120 @@ var Controls = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      return [_react2.default.createElement(
+      return _react2.default.createElement(
         'div',
-        {
-          key: 'controls-row-1',
-          className: 'btn-toolbar',
-          role: 'toolbar',
-          style: { gridColumn: 'controls1' }
-        },
-        _react2.default.createElement(ImportExportMenu, this.props)
-      ), _react2.default.createElement(
-        'div',
-        {
-          key: 'controls-row-2',
-          style: {
-            gridColumn: 'controls2',
-            display: 'flex',
-            justifyContent: 'space-between'
-          }
-        },
-        _react2.default.createElement(
-          'label',
-          { htmlFor: 'width', style: { margin: 'auto 0' } },
-          'Width'
-        ),
-        _react2.default.createElement('input', {
-          ref: function ref(input) {
-            return _this2.width = input;
-          },
-          type: 'number',
-          name: 'width',
-          className: 'form-control',
-          style: {
-            width: '5em',
-            display: 'inline-block'
-          },
-          defaultValue: this.props.width,
-          required: true
-        }),
-        _react2.default.createElement(
-          'label',
-          { htmlFor: 'height', style: { margin: 'auto 0' } },
-          'Height'
-        ),
-        _react2.default.createElement('input', {
-          ref: function ref(input) {
-            return _this2.height = input;
-          },
-          type: 'number',
-          name: 'height',
-          className: 'form-control',
-          style: {
-            width: '5em',
-            display: 'inline-block'
-          },
-          required: true,
-          defaultValue: this.props.height
-        }),
-        _react2.default.createElement('input', {
-          type: 'button',
-          className: 'btn btn-warning',
-          value: 'Resize',
-          disabled: this.props.isInterpreting ? 'disabled' : '',
-          onClick: function onClick() {
-            return _this2.props.resize({
-              height: parseInt(_this2.height.value),
-              width: parseInt(_this2.width.value),
-              clear: false
-            });
-          }
-        }),
-        _react2.default.createElement('input', {
-          type: 'button',
-          className: 'btn btn-warning',
-          value: 'Clear',
-          disabled: this.props.isInterpreting ? 'disabled' : '',
-          onClick: function onClick() {
-            return _this2.props.resize({
-              height: parseInt(_this2.height.value),
-              width: parseInt(_this2.width.value),
-              clear: true
-            });
-          }
-        })
-      ), _react2.default.createElement(
-        'div',
-        { key: 'controls-row-3', style: { gridColumn: 'controls3' } },
-        _react2.default.createElement(BSDisplaySwitch, this.props),
-        _react2.default.createElement(PaintModeSwitch, this.props),
+        { style: { display: 'flex', margin: '0 240px 0 0' } },
         _react2.default.createElement(
           'div',
-          { style: { display: 'inline-block', marginLeft: 10 } },
-          this.props.cellInFocus && this.props.blockSizes[this.props.cellInFocus[0]][this.props.cellInFocus[1]] + ' pixels in block'
+          null,
+          _react2.default.createElement(
+            'div',
+            { className: 'btn-toolbar' },
+            _react2.default.createElement(ImportExportMenu, this.props)
+          ),
+          _react2.default.createElement(
+            'div',
+            {
+              style: {
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: 10
+              }
+            },
+            _react2.default.createElement(
+              'label',
+              { htmlFor: 'width', style: { margin: 'auto 5px' } },
+              'Width'
+            ),
+            _react2.default.createElement('input', {
+              ref: function ref(input) {
+                return _this2.width = input;
+              },
+              type: 'number',
+              name: 'width',
+              className: 'form-control',
+              style: {
+                width: '5em',
+                display: 'block'
+              },
+              required: true,
+              defaultValue: this.props.width
+            }),
+            _react2.default.createElement(
+              'label',
+              { htmlFor: 'height', style: { margin: 'auto 5px' } },
+              'Height'
+            ),
+            _react2.default.createElement('input', {
+              ref: function ref(input) {
+                return _this2.height = input;
+              },
+              type: 'number',
+              name: 'height',
+              className: 'form-control',
+              style: {
+                width: '5em',
+                display: 'block',
+                marginRight: 5
+              },
+              required: true,
+              defaultValue: this.props.height
+            }),
+            _react2.default.createElement('input', {
+              type: 'button',
+              className: 'btn btn-warning',
+              value: 'Resize',
+              style: {
+                marginRight: 5
+              },
+              disabled: this.props.isInterpreting ? 'disabled' : '',
+              onClick: function onClick() {
+                return _this2.props.resize({
+                  height: parseInt(_this2.height.value),
+                  width: parseInt(_this2.width.value),
+                  clear: false
+                });
+              }
+            }),
+            _react2.default.createElement('input', {
+              type: 'button',
+              className: 'btn btn-warning',
+              value: 'Clear',
+              disabled: this.props.isInterpreting ? 'disabled' : '',
+              onClick: function onClick() {
+                return _this2.props.resize({
+                  height: parseInt(_this2.height.value),
+                  width: parseInt(_this2.width.value),
+                  clear: true
+                });
+              }
+            })
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(BSDisplaySwitch, this.props),
+            _react2.default.createElement(PaintModeSwitch, this.props),
+            _react2.default.createElement(
+              'div',
+              { style: { display: 'inline-block', marginLeft: 10 } },
+              this.props.cellInFocus && this.props.blockSizes[this.props.cellInFocus[0]][this.props.cellInFocus[1]] + ' pixels in block'
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          {
+            style: {
+              flex: 1,
+              maxWidth: 550,
+              minWidth: 450,
+              margin: '0 0 0 40px'
+            }
+          },
+          _react2.default.createElement(_colourPicker2.default, _extends({ key: 'colour-picker' }, this.props))
         )
-      ), _react2.default.createElement(_colourPicker2.default, _extends({ key: 'colour-picker' }, this.props))];
+      );
     }
   }]);
 
@@ -274,42 +280,46 @@ var ImportExportMenu = function ImportExportMenu(_ref) {
   var isInterpreting = _ref.isInterpreting,
       importImg = _ref.importImg,
       exportPng = _ref.exportPng;
-  return [_react2.default.createElement('input', {
-    key: 'import-btn',
-    type: 'button',
-    className: 'btn btn-default',
-    value: 'Import',
-    style: { width: 160 },
-    disabled: isInterpreting ? 'disabled' : '',
-    onClick: function onClick() {
-      return document.getElementById('fileChooser').click();
-    }
-  }), _react2.default.createElement('input', {
-    key: 'hidden-file-input',
-    type: 'file',
-    id: 'fileChooser',
-    accept: 'image/png, image/bmp, image/jpeg, image/gif',
-    style: { display: 'none' },
-    onChange: function onChange(event) {
-      importImg(event.target.files[0]);
-      event.target.value = '';
-    }
-  }), _react2.default.createElement(
+  return _react2.default.createElement(
     'div',
-    { key: 'export-btn', className: 'btn-group' },
+    { style: { display: 'flex', marginBottom: 10 } },
+    _react2.default.createElement(
+      'div',
+      {
+        className: 'btn btn-default',
+        style: { flex: 1, margin: '0 10px 0 5px' },
+        value: 'Import',
+        disabled: isInterpreting ? 'disabled' : '',
+        onClick: function onClick() {
+          return document.getElementById('fileChooser').click();
+        }
+      },
+      'Import',
+      _react2.default.createElement('input', {
+        key: 'hidden-file-input',
+        type: 'file',
+        id: 'fileChooser',
+        accept: 'image/png, image/bmp, image/jpeg, image/gif',
+        style: { display: 'none' },
+        onChange: function onChange(event) {
+          importImg(event.target.files[0]);
+          event.target.value = '';
+        }
+      })
+    ),
     _react2.default.createElement(
       'button',
       {
+        style: { flex: 1 },
         type: 'button',
         className: 'btn btn-default',
-        style: { width: 160 },
         onClick: function onClick() {
           return exportPng(1);
         }
       },
       'Export to PNG'
     )
-  )];
+  );
 };
 
 var PaintModeSwitch = function PaintModeSwitch(_ref2) {
@@ -383,7 +393,7 @@ exports.default = Controls;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.DebugTab = undefined;
 
@@ -395,28 +405,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // tab to make debugger visible
 var DebugTab = exports.DebugTab = function DebugTab(props) {
-    return _react2.default.createElement(
-        'div',
-        {
-            style: {
-                gridColumn: 'dtab',
-                gridRow: '1 / 4',
-                height: '100%',
-                width: '25px',
-                padding: '5px 2px',
-                writingMode: 'vertical-lr',
-                textAlign: 'center',
-                color: 'white',
-                fontWeight: 'bold',
-                backgroundColor: '#5bc0de',
-                cursor: 'pointer',
-                pointerEvents: 'auto'
-            },
-            onClick: function onClick() {
-                return props.toggleDebugger();
-            } },
-        'DEBUGGER'
-    );
+  return _react2.default.createElement(
+    'div',
+    {
+      style: {
+        position: 'fixed',
+        width: '200px',
+        padding: '5px 2px',
+        textAlign: 'center',
+        color: '#333',
+        fontWeight: 'bold',
+        backgroundColor: '#fff',
+        border: '1px solid #ddd',
+        borderRadius: 5,
+        cursor: 'pointer',
+        pointerEvents: 'auto',
+        top: 20,
+        right: 20
+      },
+      onClick: props.toggleDebugger
+    },
+    'DEBUGGER'
+  );
 };
 
 },{"react":347}],5:[function(require,module,exports){
@@ -449,6 +459,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var dragStartX = 0;
 var dragStartY = 0;
 var dragTimeout = null;
+var lastPositionRight = 20;
+var lastPositionTop = 20;
 
 var Debugger = function (_React$Component) {
   _inherits(Debugger, _React$Component);
@@ -460,29 +472,13 @@ var Debugger = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Debugger.__proto__ || Object.getPrototypeOf(Debugger)).call(this));
 
     _this.state = {
-      positionRight: 20,
-      positionTop: 20
+      positionRight: lastPositionRight,
+      positionTop: lastPositionTop
     };
     return _this;
   }
 
   _createClass(Debugger, [{
-    key: 'updatePos',
-    value: function (_updatePos) {
-      function updatePos() {
-        return _updatePos.apply(this, arguments);
-      }
-
-      updatePos.toString = function () {
-        return _updatePos.toString();
-      };
-
-      return updatePos;
-    }(function () {
-      //
-      updatePos;
-    })
-  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -539,6 +535,9 @@ var Debugger = function (_React$Component) {
                   positionRight: newPositionRight,
                   positionTop: newPositionTop
                 });
+                // persistenct when toggle
+                lastPositionRight = newPositionRight;
+                lastPositionTop = newPositionTop;
               }, 4);
             }
           },
@@ -548,9 +547,7 @@ var Debugger = function (_React$Component) {
               type: 'button',
               className: 'close',
               'aria-label': 'Close',
-              onClick: function onClick() {
-                return _this2.props.toggleDebugger();
-              }
+              onClick: this.props.toggleDebugger
             },
             _react2.default.createElement(
               'span',
@@ -858,7 +855,7 @@ exports.default = Debugger;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _react = require('react');
@@ -870,62 +867,63 @@ var _colours = require('./colours.js');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Grid = function Grid(props) {
-    return _react2.default.createElement(
-        'table',
-        {
-            style: {
-                margin: '1vh 0 0 0',
-                tableLayout: 'fixed',
-                gridColumn: 'grid / span ' + (props.debug.debugIsVisible ? '3' : '4'),
-                alignSelf: 'start',
-                justifySelf: 'start'
-            },
-            onMouseOut: function onMouseOut() {
-                return props.setCellInFocus(null);
-            } },
-        _react2.default.createElement(
-            'tbody',
-            null,
-            props.grid.map(function (row, i) {
-                return _react2.default.createElement(
-                    'tr',
-                    { key: 'row-' + i },
-                    row.map(function (cell, j) {
-                        return _react2.default.createElement(
-                            'td',
-                            {
-                                key: 'cell-' + i + '-' + j,
-                                title: '(' + j + ',' + i + ')',
-                                style: {
-                                    maxHeight: '30px',
-                                    maxWidth: '30px',
-                                    height: props.cellDim + 'px',
-                                    width: props.cellDim + 'px',
-                                    border: '1px solid black',
-                                    background: props.debug.breakpoints.includes(props.blocks[i][j]) ? 'repeating-linear-gradient(45deg, ' + _colours.colours[cell] + ', ' + _colours.colours[cell] + ' 2px, black 2px, black 4px)' : _colours.colours[cell],
-                                    color: 'white',
-                                    fontSize: '11px',
-                                    textShadow: '1px 1px 1px black',
-                                    textAlign: 'center',
-                                    cursor: {
-                                        BRUSH: 'url(img/pencil.png) 5 30,auto',
-                                        BUCKET: 'url(img/paint-bucket.png) 28 28,auto',
-                                        BP: 'url(img/bp.png) 16 32,auto'
-                                    }[props.paintMode]
-                                },
-                                onMouseOver: function onMouseOver() {
-                                    return props.setCellInFocus(i, j);
-                                },
-                                onClick: function onClick() {
-                                    return props.handleCellClick(i, j);
-                                } },
-                            props.blocks[i][j] == props.debug.block ? '◉' : props.displayBS && props.blockSizes[i][j]
-                        );
-                    })
-                );
-            })
-        )
-    );
+  return _react2.default.createElement(
+    'table',
+    {
+      style: {
+        margin: '1vh 0 0 0',
+        tableLayout: 'fixed',
+        alignSelf: 'start',
+        justifySelf: 'start'
+      },
+      onMouseOut: function onMouseOut() {
+        return props.setCellInFocus(null);
+      }
+    },
+    _react2.default.createElement(
+      'tbody',
+      null,
+      props.grid.map(function (row, i) {
+        return _react2.default.createElement(
+          'tr',
+          { key: 'row-' + i },
+          row.map(function (cell, j) {
+            return _react2.default.createElement(
+              'td',
+              {
+                key: 'cell-' + i + '-' + j,
+                title: '(' + j + ',' + i + ')',
+                style: {
+                  maxHeight: '30px',
+                  maxWidth: '30px',
+                  height: props.cellDim + 'px',
+                  width: props.cellDim + 'px',
+                  border: '1px solid black',
+                  background: props.debug.breakpoints.includes(props.blocks[i][j]) ? 'repeating-linear-gradient(45deg, ' + _colours.colours[cell] + ', ' + _colours.colours[cell] + ' 2px, black 2px, black 4px)' : _colours.colours[cell],
+                  color: 'white',
+                  fontSize: '11px',
+                  textShadow: '1px 1px 1px black',
+                  textAlign: 'center',
+                  cursor: {
+                    BRUSH: 'url(img/pencil.png) 5 30,auto',
+                    BUCKET: 'url(img/paint-bucket.png) 28 28,auto',
+                    BP: 'url(img/bp.png) 16 32,auto'
+                  }[props.paintMode]
+                },
+                onMouseOver: function onMouseOver() {
+                  return props.setCellInFocus(i, j);
+                },
+                onClick: function onClick() {
+                  return props.handleCellClick(i, j);
+                }
+              },
+              props.blocks[i][j] == props.debug.block ? '◉' : props.displayBS && props.blockSizes[i][j]
+            );
+          })
+        );
+      })
+    )
+  );
 };
 
 exports.default = Grid;
@@ -977,26 +975,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/* re-order commands to correspond to colours order based on currently-selected colour
- * NOTE: this was used to compute all command orders, which were saved to be re-used;
- * the function is no longer in use
-const mapCommandsToColours = baseColour => {
-    const rotateArray = (array, pivot) => array.slice(-pivot).concat(array.slice(0, -pivot));
-
-    let hShift = baseColour % 6;
-    let lShift = Math.floor(baseColour / 6);
-
-    let map = [
-        rotateArray(initCommands.slice(0, 6), hShift),
-        rotateArray(initCommands.slice(6, 12), hShift),
-        rotateArray(initCommands.slice(12), hShift),
-    ];
-
-    map = rotateArray(map, lShift);
-    return [...map[0], ...map[1], ...map[2]];
-};
-*/
 
 var HEIGHT = 10,
     // initial height
@@ -1484,7 +1462,18 @@ var App = function (_React$Component) {
   _createClass(App, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      var _this2 = this;
+
       this.props.appState.subscribe(this.forceUpdate.bind(this, null));
+      window.addEventListener('keypress', function (e) {
+        if (e.key === 'p') {
+          _this2.props.appState.selectPaintMode('BRUSH');
+        } else if (e.key === 'b') {
+          _this2.props.appState.selectPaintMode('BUCKET');
+        } else if (e.key === 's') {
+          _this2.props.appState.toggleDisplayBS();
+        }
+      });
     }
   }, {
     key: 'render',
@@ -1496,14 +1485,7 @@ var App = function (_React$Component) {
         {
           style: {
             width: '100%',
-            marginBottom: '1vh',
-            display: 'grid',
-            gridColumnGap: '1vw',
-            gridRowGap: '1vh',
-            gridTemplateColumns: this.props.appState.debug.debugIsVisible ? '375px 500px auto 225px' : '375px 500px auto 25px',
-            gridTemplateRows: '35px 35px 35px auto',
-            gridTemplateAreas: this.props.appState.debug.debugIsVisible ? '\'controls1 cpicker . debug\'\n                           \'controls2 cpicker . debug\'\n                           \'controls3 cpicker . debug\'\n                           \'grid grid grid debug\'' : '\'controls1 cpicker . dtab\'\n                           \'controls2 cpicker . dtab\'\n                           \'controls3 cpicker . dtab\'\n\t\t\t   \'grid grid grid grid\'',
-            alignItems: 'center'
+            marginBottom: '1vh'
           }
         },
         _react2.default.createElement(_controls2.default, _extends({ isInterpreting: isInterpreting }, this.props.appState)),

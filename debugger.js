@@ -6,20 +6,17 @@ import { normalize } from 'path';
 let dragStartX = 0;
 let dragStartY = 0;
 let dragTimeout = null;
+let lastPositionRight = 20;
+let lastPositionTop = 20;
 
 class Debugger extends React.Component {
   constructor() {
     super();
     // this.startPos = 0; // save the starting position of the debugger, for when it is dragged
     this.state = {
-      positionRight: 20,
-      positionTop: 20
+      positionRight: lastPositionRight,
+      positionTop: lastPositionTop
     };
-  }
-
-  updatePos() {
-    //
-    updatePos;
   }
 
   render() {
@@ -78,6 +75,9 @@ class Debugger extends React.Component {
                 positionRight: newPositionRight,
                 positionTop: newPositionTop
               });
+              // persistenct when toggle
+              lastPositionRight = newPositionRight;
+              lastPositionTop = newPositionTop;
             }, 4);
           }}
         >
@@ -85,7 +85,7 @@ class Debugger extends React.Component {
             type="button"
             className="close"
             aria-label="Close"
-            onClick={() => this.props.toggleDebugger()}
+            onClick={this.props.toggleDebugger}
           >
             <span aria-hidden="true">&times;</span>
           </button>
