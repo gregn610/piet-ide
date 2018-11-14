@@ -178,8 +178,7 @@ var Controls = function (_React$Component) {
           role: 'toolbar',
           style: { gridColumn: 'controls1' }
         },
-        _react2.default.createElement(ImportExportMenu, this.props),
-        _react2.default.createElement(PaintModeSwitch, this.props)
+        _react2.default.createElement(ImportExportMenu, this.props)
       ), _react2.default.createElement(
         'div',
         {
@@ -190,6 +189,25 @@ var Controls = function (_React$Component) {
             justifyContent: 'space-between'
           }
         },
+        _react2.default.createElement(
+          'label',
+          { htmlFor: 'width', style: { margin: 'auto 0' } },
+          'Width'
+        ),
+        _react2.default.createElement('input', {
+          ref: function ref(input) {
+            return _this2.width = input;
+          },
+          type: 'number',
+          name: 'width',
+          className: 'form-control',
+          style: {
+            width: '5em',
+            display: 'inline-block'
+          },
+          defaultValue: this.props.width,
+          required: true
+        }),
         _react2.default.createElement(
           'label',
           { htmlFor: 'height', style: { margin: 'auto 0' } },
@@ -208,25 +226,6 @@ var Controls = function (_React$Component) {
           },
           required: true,
           defaultValue: this.props.height
-        }),
-        _react2.default.createElement(
-          'label',
-          { htmlFor: 'width', style: { margin: 'auto 0 auto 5px' } },
-          'Width'
-        ),
-        _react2.default.createElement('input', {
-          ref: function ref(input) {
-            return _this2.width = input;
-          },
-          type: 'number',
-          name: 'width',
-          className: 'form-control',
-          style: {
-            width: '5em',
-            display: 'inline-block'
-          },
-          defaultValue: this.props.width,
-          required: true
         }),
         _react2.default.createElement('input', {
           type: 'button',
@@ -258,10 +257,10 @@ var Controls = function (_React$Component) {
         'div',
         { key: 'controls-row-3', style: { gridColumn: 'controls3' } },
         _react2.default.createElement(BSDisplaySwitch, this.props),
-        '\u2003',
+        _react2.default.createElement(PaintModeSwitch, this.props),
         _react2.default.createElement(
-          'b',
-          null,
+          'div',
+          { style: { display: 'inline-block', marginLeft: 10 } },
           this.props.cellInFocus && this.props.blockSizes[this.props.cellInFocus[0]][this.props.cellInFocus[1]] + ' pixels in block'
         )
       ), _react2.default.createElement(_colourPicker2.default, _extends({ key: 'colour-picker' }, this.props))];
@@ -278,7 +277,7 @@ var ImportExportMenu = function ImportExportMenu(_ref) {
   return [_react2.default.createElement('input', {
     key: 'import-btn',
     type: 'button',
-    className: 'btn btn-primary',
+    className: 'btn btn-default',
     value: 'Import',
     disabled: isInterpreting ? 'disabled' : '',
     onClick: function onClick() {
@@ -288,7 +287,7 @@ var ImportExportMenu = function ImportExportMenu(_ref) {
     key: 'hidden-file-input',
     id: 'fileChooser',
     type: 'file',
-    accept: 'image/png, image/bmp, image/jpeg',
+    accept: 'image/png, image/bmp, image/jpeg, image/gif',
     style: { display: 'none' },
     onChange: function onChange(event) {
       importImg(event.target.files[0]);
@@ -299,9 +298,13 @@ var ImportExportMenu = function ImportExportMenu(_ref) {
     { key: 'export-btn', className: 'btn-group' },
     _react2.default.createElement(
       'button',
-      { type: 'button', className: 'btn btn-info', onClick: function onClick() {
+      {
+        type: 'button',
+        className: 'btn btn-default',
+        onClick: function onClick() {
           return exportPng(1);
-        } },
+        }
+      },
       'Export to PNG'
     )
   )];
@@ -312,14 +315,13 @@ var PaintModeSwitch = function PaintModeSwitch(_ref2) {
       selectPaintMode = _ref2.selectPaintMode;
   return _react2.default.createElement(
     'div',
-    { className: 'btn-group', role: 'group', style: { float: 'right' } },
+    { className: 'btn-group', role: 'group' },
     _react2.default.createElement(
       'button',
       {
         type: 'button',
         title: 'Brush mode (fill single pixel)',
         className: 'btn btn-default ' + (paintMode == 'BRUSH' ? 'active' : ''),
-        style: { padding: '2px 12px' },
         onClick: function onClick() {
           return selectPaintMode('BRUSH');
         }
@@ -332,7 +334,6 @@ var PaintModeSwitch = function PaintModeSwitch(_ref2) {
         type: 'button',
         title: 'Bucket mode (fill block of pixels)',
         className: 'btn btn-default ' + (paintMode == 'BUCKET' ? 'active' : ''),
-        style: { padding: '2px 12px' },
         onClick: function onClick() {
           return selectPaintMode('BUCKET');
         }
@@ -345,21 +346,33 @@ var PaintModeSwitch = function PaintModeSwitch(_ref2) {
 var BSDisplaySwitch = function BSDisplaySwitch(_ref3) {
   var displayBS = _ref3.displayBS,
       toggleDisplayBS = _ref3.toggleDisplayBS;
-  return displayBS ? _react2.default.createElement('i', {
-    className: 'glyphicon glyphicon-eye-open',
-    title: 'Show block sizes',
-    style: { fontSize: '16px' },
-    onClick: function onClick() {
-      return toggleDisplayBS();
-    }
-  }) : _react2.default.createElement('i', {
-    className: 'glyphicon glyphicon-eye-close',
-    title: 'Show block sizes',
-    style: { fontSize: '16px' },
-    onClick: function onClick() {
-      return toggleDisplayBS();
-    }
-  });
+  return displayBS ? _react2.default.createElement(
+    'button',
+    {
+      type: 'button',
+      className: 'btn btn-default',
+      style: { marginRight: 5 },
+      onClick: toggleDisplayBS
+    },
+    _react2.default.createElement('i', {
+      className: 'glyphicon glyphicon-eye-open',
+      title: 'Show block sizes',
+      style: { fontSize: '16px' }
+    })
+  ) : _react2.default.createElement(
+    'button',
+    {
+      type: 'button',
+      className: 'btn btn-default',
+      style: { marginRight: 5 },
+      onClick: toggleDisplayBS
+    },
+    _react2.default.createElement('i', {
+      className: 'glyphicon glyphicon-eye-close',
+      title: 'Show block sizes',
+      style: { fontSize: '16px' }
+    })
+  );
 };
 
 exports.default = Controls;
