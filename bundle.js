@@ -279,13 +279,13 @@ var ImportExportMenu = function ImportExportMenu(_ref) {
     type: 'button',
     className: 'btn btn-default',
     value: 'Import',
+    style: { width: 160 },
     disabled: isInterpreting ? 'disabled' : '',
     onClick: function onClick() {
       return document.getElementById('fileChooser').click();
     }
   }), _react2.default.createElement('input', {
     key: 'hidden-file-input',
-    id: 'fileChooser',
     type: 'file',
     accept: 'image/png, image/bmp, image/jpeg, image/gif',
     style: { display: 'none' },
@@ -301,6 +301,7 @@ var ImportExportMenu = function ImportExportMenu(_ref) {
       {
         type: 'button',
         className: 'btn btn-default',
+        style: { width: 160 },
         onClick: function onClick() {
           return exportPng(1);
         }
@@ -651,20 +652,18 @@ var DebugControls = function DebugControls(_ref2) {
       step = _ref2.step,
       cont = _ref2.cont,
       stop = _ref2.stop,
-      runSpeed = _ref2.runSpeed,
-      isInterpreting = _ref2.isInterpreting,
-      setRunSpeed = _ref2.setRunSpeed,
       paintMode = _ref2.paintMode,
       toggleSetBP = _ref2.toggleSetBP;
   return _react2.default.createElement(
     'div',
-    { className: 'btn-toolbar', role: 'toolbar', style: { margin: '0 0 1vh' } },
+    {
+      className: 'btn-toolbar',
+      role: 'toolbar',
+      style: { display: 'flexbox', margin: '0 0 1vh' }
+    },
     _react2.default.createElement(
       'div',
-      {
-        className: 'btn-group btn-group-sm',
-        style: { width: '52px', margin: '0' }
-      },
+      { className: 'btn-group btn-group-sm', style: { margin: '0 0 5px' } },
       _react2.default.createElement(
         'button',
         {
@@ -681,7 +680,7 @@ var DebugControls = function DebugControls(_ref2) {
       {
         className: 'btn-group btn-group-sm',
         role: 'group',
-        style: { width: '136px', margin: '0 0 0 4px' }
+        style: { margin: '0 0 0 10px' }
       },
       _react2.default.createElement(
         'button',
@@ -689,9 +688,7 @@ var DebugControls = function DebugControls(_ref2) {
           type: 'button',
           className: 'btn btn-warning',
           title: 'Pause',
-          onClick: function onClick() {
-            return pause();
-          }
+          onClick: pause
         },
         _react2.default.createElement('i', { className: 'glyphicon glyphicon-pause' })
       ),
@@ -701,9 +698,7 @@ var DebugControls = function DebugControls(_ref2) {
           type: 'button',
           className: 'btn btn-info',
           title: 'Step',
-          onClick: function onClick() {
-            return step();
-          }
+          onClick: step
         },
         _react2.default.createElement('i', { className: 'glyphicon glyphicon-step-forward' })
       ),
@@ -711,41 +706,47 @@ var DebugControls = function DebugControls(_ref2) {
         'button',
         {
           type: 'button',
-          className: 'btn btn-primary',
+          className: 'btn btn-info',
           title: 'Continue running from this point',
-          onClick: function onClick() {
-            return cont();
-          }
+          onClick: cont
         },
         _react2.default.createElement('i', { className: 'glyphicon glyphicon-fast-forward' })
-      ),
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: 'btn-group btn-group-sm', style: { margin: '0 0 0 5px' } },
       _react2.default.createElement(
         'button',
         {
           type: 'button',
           className: 'btn btn-danger',
           title: 'Stop',
-          onClick: function onClick() {
-            return stop();
-          }
+          onClick: stop
         },
         _react2.default.createElement('i', { className: 'glyphicon glyphicon-stop' })
       )
     ),
-    _react2.default.createElement('i', {
-      className: 'glyphicon glyphicon-map-marker',
-      title: 'Set breakpoints',
-      style: {
-        fontSize: '18px',
-        margin: '0 0 0 3px',
-        padding: '5px 0',
-        cursor: 'pointer',
-        color: paintMode == 'BP' ? 'red' : 'black'
+    _react2.default.createElement(
+      'div',
+      {
+        className: 'btn-group btn-group-sm',
+        role: 'group',
+        style: { margin: '0 0 0 10px' }
       },
-      onClick: function onClick() {
-        return toggleSetBP();
-      }
-    })
+      _react2.default.createElement('i', {
+        className: 'glyphicon glyphicon-map-marker',
+        title: 'Set breakpoints',
+        style: {
+          fontSize: '18px',
+          margin: '0 0 0 0',
+          padding: '3px 0 3px',
+          cursor: 'pointer',
+          color: paintMode == 'BP' ? 'red' : 'black'
+        },
+        onClick: toggleSetBP
+      })
+    )
   );
 };
 

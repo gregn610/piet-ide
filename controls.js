@@ -111,12 +111,12 @@ const ImportExportMenu = ({ isInterpreting, importImg, exportPng }) => [
     type="button"
     className="btn btn-default"
     value="Import"
+    style={{ width: 160 }}
     disabled={isInterpreting ? 'disabled' : ''}
     onClick={() => document.getElementById('fileChooser').click()}
   />,
   <input
     key="hidden-file-input"
-    id="fileChooser"
     type="file"
     accept="image/png, image/bmp, image/jpeg, image/gif"
     style={{ display: 'none' }}
@@ -130,6 +130,7 @@ const ImportExportMenu = ({ isInterpreting, importImg, exportPng }) => [
     <button
       type="button"
       className="btn btn-default"
+      style={{ width: 160 }}
       onClick={() => exportPng(1)}
     >
       Export to PNG

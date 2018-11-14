@@ -171,17 +171,15 @@ const DebugControls = ({
   step,
   cont,
   stop,
-  runSpeed,
-  isInterpreting,
-  setRunSpeed,
   paintMode,
   toggleSetBP
 }) => (
-  <div className="btn-toolbar" role="toolbar" style={{ margin: '0 0 1vh' }}>
-    <div
-      className="btn-group btn-group-sm"
-      style={{ width: '52px', margin: '0' }}
-    >
+  <div
+    className="btn-toolbar"
+    role="toolbar"
+    style={{ display: 'flexbox', margin: '0 0 1vh' }}
+  >
+    <div className="btn-group btn-group-sm" style={{ margin: '0 0 5px' }}>
       <button
         type="button"
         className="btn btn-success"
@@ -190,33 +188,17 @@ const DebugControls = ({
       >
         <i className="glyphicon glyphicon-play" />
       </button>
-      {/* <ul className="dropdown-menu">
-        <li style={{ padding: '0 5px' }}>
-          <small style={{ float: 'left' }}>Slower</small>
-          <small style={{ float: 'right' }}>Faster</small>
-          <input
-            type="range"
-            min="0"
-            max="1000"
-            step="100"
-            value={1000 - runSpeed}
-            onChange={event =>
-              !isInterpreting && setRunSpeed(1000 - event.target.value)
-            }
-          />
-        </li>
-      </ul> */}
     </div>
     <div
       className="btn-group btn-group-sm"
       role="group"
-      style={{ width: '136px', margin: '0 0 0 4px' }}
+      style={{ margin: '0 0 0 10px' }}
     >
       <button
         type="button"
         className="btn btn-warning"
         title="Pause"
-        onClick={() => pause()}
+        onClick={pause}
       >
         <i className="glyphicon glyphicon-pause" />
       </button>
@@ -224,40 +206,47 @@ const DebugControls = ({
         type="button"
         className="btn btn-info"
         title="Step"
-        onClick={() => step()}
+        onClick={step}
       >
         <i className="glyphicon glyphicon-step-forward" />
       </button>
       <button
         type="button"
-        className="btn btn-primary"
+        className="btn btn-info"
         title="Continue running from this point"
-        onClick={() => cont()}
+        onClick={cont}
       >
         <i className="glyphicon glyphicon-fast-forward" />
       </button>
+    </div>
+    <div className="btn-group btn-group-sm" style={{ margin: '0 0 0 5px' }}>
       <button
         type="button"
         className="btn btn-danger"
         title="Stop"
-        onClick={() => stop()}
+        onClick={stop}
       >
         <i className="glyphicon glyphicon-stop" />
       </button>
     </div>
-
-    <i
-      className="glyphicon glyphicon-map-marker"
-      title="Set breakpoints"
-      style={{
-        fontSize: '18px',
-        margin: '0 0 0 3px',
-        padding: '5px 0',
-        cursor: 'pointer',
-        color: paintMode == 'BP' ? 'red' : 'black'
-      }}
-      onClick={() => toggleSetBP()}
-    />
+    <div
+      className="btn-group btn-group-sm"
+      role="group"
+      style={{ margin: '0 0 0 10px' }}
+    >
+      <i
+        className="glyphicon glyphicon-map-marker"
+        title="Set breakpoints"
+        style={{
+          fontSize: '18px',
+          margin: '0 0 0 0',
+          padding: '3px 0 3px',
+          cursor: 'pointer',
+          color: paintMode == 'BP' ? 'red' : 'black'
+        }}
+        onClick={toggleSetBP}
+      />
+    </div>
   </div>
 );
 
