@@ -327,7 +327,7 @@ const appState = {
     commandList: [],
     interpreter: null,
     runner: null, // intervalId used for automatically stepping through program
-    runSpeed: 500, // delay between steps while running, in ms
+    runSpeed: 400, // delay between steps while running, in ms
     breakpoints: [],
 
     DP: 0, // index into [right, down, left, up], direction pointer initially points right
@@ -362,7 +362,6 @@ const appState = {
       appState.debug.currCommand = null;
       appState.debug.interpreter = null;
 
-      // appState.debug.receiveInput(); // grab input
       appState.notify();
 
       // create generator
@@ -459,6 +458,7 @@ const appState = {
         // if the generator has been cleared or is finished, clear the timer
         if (!appState.debug.interpreter) {
           clearInterval(appState.debug.runner);
+          appState.debug.runner = null;
         } else if ((step = appState.debug.interpreter.next()).done) {
           // if the generator is finished, clear the interpreter
           appState.debug.interpreter = null;
@@ -490,13 +490,13 @@ const appState = {
       appState.debug.interpreter = null;
       appState.debug.block = null;
       appState.debug.currCommand = null;
-
       appState.notify();
     }).bind(this),
 
     // pause running
     pause: (() => {
       clearInterval(appState.debug.runner);
+      appState.debug.runner = null;
     }).bind(this)
   }
 };
@@ -505,12 +505,38 @@ class App extends React.Component {
   componentDidMount() {
     this.props.appState.subscribe(this.forceUpdate.bind(this, null));
     window.addEventListener('keypress', e => {
+      const { appState } = this.props;
       if (e.key === 'p') {
-        this.props.appState.selectPaintMode('BRUSH');
+        appState.selectPaintMode('BRUSH');
       } else if (e.key === 'b') {
-        this.props.appState.selectPaintMode('BUCKET');
+        appState.selectPaintMode('BUCKET');
       } else if (e.key === 's') {
-        this.props.appState.toggleDisplayBS();
+        appState.toggleDisplayBS();
+      } else if (e.keyCode === 61 || e.keyCode === 43) {
+        const newSpeed = Math.max(200, appState.debug.runSpeed - 200);
+        appState.debug.setRunSpeed(newSpeed);
+        appState.debug.pause();
+        appState.debug.cont();
+      } else if (e.keyCode === 45 || e.keyCode === 95) {
+        const newSpeed = Math.min(2000, appState.debug.runSpeed + 200);
+        appState.debug.setRunSpeed(newSpeed);
+        appState.debug.pause();
+        appState.debug.cont();
+      } else if (e.altKey && e.charCode === 160) {
+        if (appState.debug.interpreter) {
+          if (appState.debug.runner) {
+            // has runner -> paused
+            console.log('paused');
+            appState.debug.pause();
+          } else {
+            console.log('cont');
+            appState.debug.cont();
+          }
+        } else {
+          // else start
+          console.log('start');
+          appState.debug.start();
+        }
       }
     });
   }
@@ -532,6 +558,38 @@ class App extends React.Component {
         ) : (
           <DebugTab {...this.props.appState} />
         )}
+        <div
+          style={{
+            marginTop: 10,
+            padding: '5px',
+            width: 300,
+            border: '1px solid #ddd',
+            borderRadius: '5px',
+            background: '#fafafa'
+          }}
+        >
+          <div>
+            <b>Hot Key</b>
+          </div>
+          <div>
+            <b>p</b>: <span>brush Mode</span>
+          </div>
+          <div>
+            <b>b</b>: <span>bucket Mode</span>
+          </div>
+          <div>
+            <b>s</b>: <span>toggle display block size</span>
+          </div>
+          <div>
+            <b>alt+space</b>: <span>run / paused</span>
+          </div>
+          <div>
+            <b>+</b>: <span>increase run speed</span>
+          </div>
+          <div>
+            <b>-</b>: <span>decrease run speed</span>
+          </div>
+        </div>
       </div>
     );
   }

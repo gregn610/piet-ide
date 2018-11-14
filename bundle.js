@@ -651,99 +651,110 @@ var DebugControls = function DebugControls(_ref2) {
       cont = _ref2.cont,
       stop = _ref2.stop,
       paintMode = _ref2.paintMode,
-      toggleSetBP = _ref2.toggleSetBP;
+      toggleSetBP = _ref2.toggleSetBP,
+      runSpeed = _ref2.runSpeed;
   return _react2.default.createElement(
     'div',
-    {
-      className: 'btn-toolbar',
-      role: 'toolbar',
-      style: { display: 'flexbox', margin: '0 0 1vh' }
-    },
-    _react2.default.createElement(
-      'div',
-      { className: 'btn-group btn-group-sm', style: { margin: '0 0 5px' } },
-      _react2.default.createElement(
-        'button',
-        {
-          type: 'button',
-          className: 'btn btn-success',
-          title: 'Run from the beginning',
-          onClick: start
-        },
-        _react2.default.createElement('i', { className: 'glyphicon glyphicon-play' })
-      )
-    ),
+    null,
     _react2.default.createElement(
       'div',
       {
-        className: 'btn-group btn-group-sm',
-        role: 'group',
-        style: { margin: '0 0 0 10px' }
+        className: 'btn-toolbar',
+        role: 'toolbar',
+        style: { display: 'flexbox', margin: '0 0 1vh' }
       },
       _react2.default.createElement(
-        'button',
-        {
-          type: 'button',
-          className: 'btn btn-warning',
-          title: 'Pause',
-          onClick: pause
-        },
-        _react2.default.createElement('i', { className: 'glyphicon glyphicon-pause' })
+        'div',
+        { className: 'btn-group btn-group-sm', style: { margin: '0 0 5px' } },
+        _react2.default.createElement(
+          'button',
+          {
+            type: 'button',
+            className: 'btn btn-success',
+            title: 'Run from the beginning',
+            onClick: start
+          },
+          _react2.default.createElement('i', { className: 'glyphicon glyphicon-play' })
+        )
       ),
       _react2.default.createElement(
-        'button',
+        'div',
         {
-          type: 'button',
-          className: 'btn btn-info',
-          title: 'Step',
-          onClick: step
+          className: 'btn-group btn-group-sm',
+          role: 'group',
+          style: { margin: '0 0 0 10px' }
         },
-        _react2.default.createElement('i', { className: 'glyphicon glyphicon-step-forward' })
+        _react2.default.createElement(
+          'button',
+          {
+            type: 'button',
+            className: 'btn btn-warning',
+            title: 'Pause',
+            onClick: pause
+          },
+          _react2.default.createElement('i', { className: 'glyphicon glyphicon-pause' })
+        ),
+        _react2.default.createElement(
+          'button',
+          {
+            type: 'button',
+            className: 'btn btn-info',
+            title: 'Step',
+            onClick: step
+          },
+          _react2.default.createElement('i', { className: 'glyphicon glyphicon-step-forward' })
+        ),
+        _react2.default.createElement(
+          'button',
+          {
+            type: 'button',
+            className: 'btn btn-info',
+            title: 'Continue running from this point',
+            onClick: cont
+          },
+          _react2.default.createElement('i', { className: 'glyphicon glyphicon-fast-forward' })
+        )
       ),
       _react2.default.createElement(
-        'button',
+        'div',
+        { className: 'btn-group btn-group-sm', style: { margin: '0 0 0 5px' } },
+        _react2.default.createElement(
+          'button',
+          {
+            type: 'button',
+            className: 'btn btn-danger',
+            title: 'Stop',
+            onClick: stop
+          },
+          _react2.default.createElement('i', { className: 'glyphicon glyphicon-stop' })
+        )
+      ),
+      _react2.default.createElement(
+        'div',
         {
-          type: 'button',
-          className: 'btn btn-info',
-          title: 'Continue running from this point',
-          onClick: cont
+          className: 'btn-group btn-group-sm',
+          role: 'group',
+          style: { margin: '0 0 0 10px' }
         },
-        _react2.default.createElement('i', { className: 'glyphicon glyphicon-fast-forward' })
+        _react2.default.createElement('i', {
+          className: 'glyphicon glyphicon-map-marker',
+          title: 'Set breakpoints',
+          style: {
+            fontSize: '18px',
+            margin: '0 0 0 0',
+            padding: '3px 0 3px',
+            cursor: 'pointer',
+            color: paintMode == 'BP' ? 'red' : 'black'
+          },
+          onClick: toggleSetBP
+        })
       )
     ),
     _react2.default.createElement(
       'div',
-      { className: 'btn-group btn-group-sm', style: { margin: '0 0 0 5px' } },
-      _react2.default.createElement(
-        'button',
-        {
-          type: 'button',
-          className: 'btn btn-danger',
-          title: 'Stop',
-          onClick: stop
-        },
-        _react2.default.createElement('i', { className: 'glyphicon glyphicon-stop' })
-      )
-    ),
-    _react2.default.createElement(
-      'div',
-      {
-        className: 'btn-group btn-group-sm',
-        role: 'group',
-        style: { margin: '0 0 0 10px' }
-      },
-      _react2.default.createElement('i', {
-        className: 'glyphicon glyphicon-map-marker',
-        title: 'Set breakpoints',
-        style: {
-          fontSize: '18px',
-          margin: '0 0 0 0',
-          padding: '3px 0 3px',
-          cursor: 'pointer',
-          color: paintMode == 'BP' ? 'red' : 'black'
-        },
-        onClick: toggleSetBP
-      })
+      null,
+      'Speed: ',
+      (2400 - runSpeed) / 200
     )
   );
 };
@@ -1285,7 +1296,7 @@ var appState = {
     commandList: [],
     interpreter: null,
     runner: null, // intervalId used for automatically stepping through program
-    runSpeed: 500, // delay between steps while running, in ms
+    runSpeed: 400, // delay between steps while running, in ms
     breakpoints: [],
 
     DP: 0, // index into [right, down, left, up], direction pointer initially points right
@@ -1320,7 +1331,6 @@ var appState = {
       appState.debug.currCommand = null;
       appState.debug.interpreter = null;
 
-      // appState.debug.receiveInput(); // grab input
       appState.notify();
 
       // create generator
@@ -1411,6 +1421,7 @@ var appState = {
         // if the generator has been cleared or is finished, clear the timer
         if (!appState.debug.interpreter) {
           clearInterval(appState.debug.runner);
+          appState.debug.runner = null;
         } else if ((step = appState.debug.interpreter.next()).done) {
           // if the generator is finished, clear the interpreter
           appState.debug.interpreter = null;
@@ -1439,13 +1450,13 @@ var appState = {
       appState.debug.interpreter = null;
       appState.debug.block = null;
       appState.debug.currCommand = null;
-
       appState.notify();
     }.bind(undefined),
 
     // pause running
     pause: function () {
       clearInterval(appState.debug.runner);
+      appState.debug.runner = null;
     }.bind(undefined)
   }
 };
@@ -1466,12 +1477,39 @@ var App = function (_React$Component) {
 
       this.props.appState.subscribe(this.forceUpdate.bind(this, null));
       window.addEventListener('keypress', function (e) {
+        var appState = _this2.props.appState;
+
         if (e.key === 'p') {
-          _this2.props.appState.selectPaintMode('BRUSH');
+          appState.selectPaintMode('BRUSH');
         } else if (e.key === 'b') {
-          _this2.props.appState.selectPaintMode('BUCKET');
+          appState.selectPaintMode('BUCKET');
         } else if (e.key === 's') {
-          _this2.props.appState.toggleDisplayBS();
+          appState.toggleDisplayBS();
+        } else if (e.keyCode === 61 || e.keyCode === 43) {
+          var newSpeed = Math.max(200, appState.debug.runSpeed - 200);
+          appState.debug.setRunSpeed(newSpeed);
+          appState.debug.pause();
+          appState.debug.cont();
+        } else if (e.keyCode === 45 || e.keyCode === 95) {
+          var _newSpeed = Math.min(2000, appState.debug.runSpeed + 200);
+          appState.debug.setRunSpeed(_newSpeed);
+          appState.debug.pause();
+          appState.debug.cont();
+        } else if (e.altKey && e.charCode === 160) {
+          if (appState.debug.interpreter) {
+            if (appState.debug.runner) {
+              // has runner -> paused
+              console.log('paused');
+              appState.debug.pause();
+            } else {
+              console.log('cont');
+              appState.debug.cont();
+            }
+          } else {
+            // else start
+            console.log('start');
+            appState.debug.start();
+          }
         }
       });
     }
@@ -1490,7 +1528,119 @@ var App = function (_React$Component) {
         },
         _react2.default.createElement(_controls2.default, _extends({ isInterpreting: isInterpreting }, this.props.appState)),
         _react2.default.createElement(_grid2.default, this.props.appState),
-        this.props.appState.debug.debugIsVisible ? _react2.default.createElement(_debugger2.default, _extends({ isInterpreting: isInterpreting }, this.props.appState)) : _react2.default.createElement(_debugTab.DebugTab, this.props.appState)
+        this.props.appState.debug.debugIsVisible ? _react2.default.createElement(_debugger2.default, _extends({ isInterpreting: isInterpreting }, this.props.appState)) : _react2.default.createElement(_debugTab.DebugTab, this.props.appState),
+        _react2.default.createElement(
+          'div',
+          {
+            style: {
+              marginTop: 10,
+              padding: '5px',
+              width: 300,
+              border: '1px solid #ddd',
+              borderRadius: '5px',
+              background: '#fafafa'
+            }
+          },
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'b',
+              null,
+              'Hot Key'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'b',
+              null,
+              'p'
+            ),
+            ': ',
+            _react2.default.createElement(
+              'span',
+              null,
+              'brush Mode'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'b',
+              null,
+              'b'
+            ),
+            ': ',
+            _react2.default.createElement(
+              'span',
+              null,
+              'bucket Mode'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'b',
+              null,
+              's'
+            ),
+            ': ',
+            _react2.default.createElement(
+              'span',
+              null,
+              'toggle display block size'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'b',
+              null,
+              'alt+space'
+            ),
+            ': ',
+            _react2.default.createElement(
+              'span',
+              null,
+              'run / paused'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'b',
+              null,
+              '+'
+            ),
+            ': ',
+            _react2.default.createElement(
+              'span',
+              null,
+              'increase run speed'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'b',
+              null,
+              '-'
+            ),
+            ': ',
+            _react2.default.createElement(
+              'span',
+              null,
+              'decrease run speed'
+            )
+          )
+        )
       );
     }
   }]);
