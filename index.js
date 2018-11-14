@@ -43,6 +43,8 @@ const appState = {
   cellInFocus: null,
   displayBS: false, // initially do not show block sizes
 
+  paintDragging: false, // is paint dragging?
+
   // add listener
   subscribe: (listener => appState.listeners.push(listener)).bind(this),
   // notify listeners
@@ -97,7 +99,6 @@ const appState = {
   // select paint mode (BRUSH, BUCKET, BP)
   selectPaintMode: (mode => {
     appState.paintMode = mode;
-
     appState.notify();
   }).bind(this),
 
@@ -172,8 +173,24 @@ const appState = {
       appState.cellInFocus = null;
     } else {
       appState.cellInFocus = [row, cell];
+      if (appState.paintDragging) {
+        appState.brushPaint(row, cell);
+      }
     }
+    appState.notify();
+  }).bind(this),
 
+  endDraggingEventHandler: (() => {
+    appState.paintDragging = false;
+    // console.log('release');
+    window.removeEventListener('mouseup', appState.endDraggingEventHandler);
+  }).bind(this),
+
+  setMouseDown: (() => {
+    if (appState.paintMode === 'BRUSH') {
+      appState.paintDragging = true;
+      window.addEventListener('mouseup', appState.endDraggingEventHandler);
+    }
     appState.notify();
   }).bind(this),
 
@@ -315,8 +332,6 @@ const appState = {
   // toggle debugger visibility
   toggleDebugger: (() => {
     appState.debug.debugIsVisible = !appState.debug.debugIsVisible;
-
-    // update cell dimensions ******
 
     appState.notify();
   }).bind(this),
@@ -565,42 +580,46 @@ class App extends React.Component {
         ) : (
           <DebugTab {...this.props.appState} />
         )}
-        <div
-          style={{
-            marginTop: 10,
-            padding: '5px',
-            width: 300,
-            border: '1px solid #ddd',
-            borderRadius: '5px',
-            background: '#fafafa'
-          }}
-        >
-          <div>
-            <b>Hot Key</b>
-          </div>
-          <div>
-            <b>p</b>: <span>brush Mode</span>
-          </div>
-          <div>
-            <b>b</b>: <span>bucket Mode</span>
-          </div>
-          <div>
-            <b>s</b>: <span>toggle display block size</span>
-          </div>
-          <div>
-            <b>alt+space</b>: <span>run / paused</span>
-          </div>
-          <div>
-            <b>+</b>: <span>increase run speed</span>
-          </div>
-          <div>
-            <b>-</b>: <span>decrease run speed</span>
-          </div>
-        </div>
+        <HotKeyInfo />
       </div>
     );
   }
 }
+
+const HotKeyInfo = () => (
+  <div
+    style={{
+      marginTop: 10,
+      padding: '5px',
+      width: 300,
+      border: '1px solid #ddd',
+      borderRadius: '5px',
+      background: '#fafafa'
+    }}
+  >
+    <div>
+      <b>Hot Key</b>
+    </div>
+    <div>
+      <b>p</b>: <span>brush Mode</span>
+    </div>
+    <div>
+      <b>b</b>: <span>bucket Mode</span>
+    </div>
+    <div>
+      <b>s</b>: <span>toggle display block size</span>
+    </div>
+    <div>
+      <b>alt+space</b>: <span>run / paused</span>
+    </div>
+    <div>
+      <b>+</b>: <span>increase run speed</span>
+    </div>
+    <div>
+      <b>-</b>: <span>decrease run speed</span>
+    </div>
+  </div>
+);
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<App appState={appState} />, document.getElementById('root'));

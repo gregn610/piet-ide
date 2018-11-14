@@ -1,19 +1,34 @@
 import React from 'react';
-
 import { colours } from './colours.js';
 
-const Grid = props => (
+const Grid = ({
+  paintMode,
+  grid,
+  cellDim,
+  setCellInFocus,
+  setMouseDown,
+  handleCellClick,
+  blocks,
+  debug,
+  displayBS,
+  blockSizes
+}) => (
   <table
     style={{
       margin: '1vh 0 0 0',
       tableLayout: 'fixed',
       alignSelf: 'start',
-      justifySelf: 'start'
+      justifySelf: 'start',
+      cursor: {
+        BRUSH: 'url(img/pencil.png) 5 30,auto',
+        BUCKET: 'url(img/paint-bucket.png) 28 28,auto',
+        BP: 'url(img/bp.png) 16 32,auto'
+      }[paintMode]
     }}
-    onMouseOut={() => props.setCellInFocus(null)}
+    onMouseOut={() => setCellInFocus(null)}
   >
     <tbody>
-      {props.grid.map((row, i) => (
+      {grid.map((row, i) => (
         <tr key={'row-' + i}>
           {row.map((cell, j) => (
             <td
@@ -22,10 +37,10 @@ const Grid = props => (
               style={{
                 maxHeight: '30px',
                 maxWidth: '30px',
-                height: props.cellDim + 'px',
-                width: props.cellDim + 'px',
+                height: cellDim + 'px',
+                width: cellDim + 'px',
                 border: '1px solid black',
-                background: props.debug.breakpoints.includes(props.blocks[i][j])
+                background: debug.breakpoints.includes(blocks[i][j])
                   ? 'repeating-linear-gradient(45deg, ' +
                     colours[cell] +
                     ', ' +
@@ -35,19 +50,15 @@ const Grid = props => (
                 color: 'white',
                 fontSize: '11px',
                 textShadow: '1px 1px 1px black',
-                textAlign: 'center',
-                cursor: {
-                  BRUSH: 'url(img/pencil.png) 5 30,auto',
-                  BUCKET: 'url(img/paint-bucket.png) 28 28,auto',
-                  BP: 'url(img/bp.png) 16 32,auto'
-                }[props.paintMode]
+                textAlign: 'center'
               }}
-              onMouseOver={() => props.setCellInFocus(i, j)}
-              onClick={() => props.handleCellClick(i, j)}
+              onMouseOver={() => setCellInFocus(i, j)}
+              onMouseDown={setMouseDown}
+              onClick={() => handleCellClick(i, j)}
             >
-              {props.blocks[i][j] == props.debug.block
+              {blocks[i][j] == debug.block
                 ? '◉'
-                : props.displayBS && props.blockSizes[i][j]}
+                : displayBS && blockSizes[i][j]}
             </td>
           ))}
         </tr>

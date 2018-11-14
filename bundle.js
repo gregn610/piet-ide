@@ -881,7 +881,17 @@ var _colours = require('./colours.js');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Grid = function Grid(props) {
+var Grid = function Grid(_ref) {
+  var paintMode = _ref.paintMode,
+      grid = _ref.grid,
+      cellDim = _ref.cellDim,
+      setCellInFocus = _ref.setCellInFocus,
+      setMouseDown = _ref.setMouseDown,
+      handleCellClick = _ref.handleCellClick,
+      blocks = _ref.blocks,
+      debug = _ref.debug,
+      displayBS = _ref.displayBS,
+      blockSizes = _ref.blockSizes;
   return _react2.default.createElement(
     'table',
     {
@@ -889,16 +899,21 @@ var Grid = function Grid(props) {
         margin: '1vh 0 0 0',
         tableLayout: 'fixed',
         alignSelf: 'start',
-        justifySelf: 'start'
+        justifySelf: 'start',
+        cursor: {
+          BRUSH: 'url(img/pencil.png) 5 30,auto',
+          BUCKET: 'url(img/paint-bucket.png) 28 28,auto',
+          BP: 'url(img/bp.png) 16 32,auto'
+        }[paintMode]
       },
       onMouseOut: function onMouseOut() {
-        return props.setCellInFocus(null);
+        return setCellInFocus(null);
       }
     },
     _react2.default.createElement(
       'tbody',
       null,
-      props.grid.map(function (row, i) {
+      grid.map(function (row, i) {
         return _react2.default.createElement(
           'tr',
           { key: 'row-' + i },
@@ -911,28 +926,24 @@ var Grid = function Grid(props) {
                 style: {
                   maxHeight: '30px',
                   maxWidth: '30px',
-                  height: props.cellDim + 'px',
-                  width: props.cellDim + 'px',
+                  height: cellDim + 'px',
+                  width: cellDim + 'px',
                   border: '1px solid black',
-                  background: props.debug.breakpoints.includes(props.blocks[i][j]) ? 'repeating-linear-gradient(45deg, ' + _colours.colours[cell] + ', ' + _colours.colours[cell] + ' 2px, black 2px, black 4px)' : _colours.colours[cell],
+                  background: debug.breakpoints.includes(blocks[i][j]) ? 'repeating-linear-gradient(45deg, ' + _colours.colours[cell] + ', ' + _colours.colours[cell] + ' 2px, black 2px, black 4px)' : _colours.colours[cell],
                   color: 'white',
                   fontSize: '11px',
                   textShadow: '1px 1px 1px black',
-                  textAlign: 'center',
-                  cursor: {
-                    BRUSH: 'url(img/pencil.png) 5 30,auto',
-                    BUCKET: 'url(img/paint-bucket.png) 28 28,auto',
-                    BP: 'url(img/bp.png) 16 32,auto'
-                  }[props.paintMode]
+                  textAlign: 'center'
                 },
                 onMouseOver: function onMouseOver() {
-                  return props.setCellInFocus(i, j);
+                  return setCellInFocus(i, j);
                 },
+                onMouseDown: setMouseDown,
                 onClick: function onClick() {
-                  return props.handleCellClick(i, j);
+                  return handleCellClick(i, j);
                 }
               },
-              props.blocks[i][j] == props.debug.block ? '◉' : props.displayBS && props.blockSizes[i][j]
+              blocks[i][j] == debug.block ? '◉' : displayBS && blockSizes[i][j]
             );
           })
         );
@@ -1023,6 +1034,8 @@ var appState = {
   cellInFocus: null,
   displayBS: false, // initially do not show block sizes
 
+  paintDragging: false, // is paint dragging?
+
   // add listener
   subscribe: function (listener) {
     return appState.listeners.push(listener);
@@ -1087,7 +1100,6 @@ var appState = {
   // select paint mode (BRUSH, BUCKET, BP)
   selectPaintMode: function (mode) {
     appState.paintMode = mode;
-
     appState.notify();
   }.bind(undefined),
 
@@ -1156,8 +1168,24 @@ var appState = {
       appState.cellInFocus = null;
     } else {
       appState.cellInFocus = [row, cell];
+      if (appState.paintDragging) {
+        appState.brushPaint(row, cell);
+      }
     }
+    appState.notify();
+  }.bind(undefined),
 
+  endDraggingEventHandler: function () {
+    appState.paintDragging = false;
+    // console.log('release');
+    window.removeEventListener('mouseup', appState.endDraggingEventHandler);
+  }.bind(undefined),
+
+  setMouseDown: function () {
+    if (appState.paintMode === 'BRUSH') {
+      appState.paintDragging = true;
+      window.addEventListener('mouseup', appState.endDraggingEventHandler);
+    }
     appState.notify();
   }.bind(undefined),
 
@@ -1288,8 +1316,6 @@ var appState = {
   // toggle debugger visibility
   toggleDebugger: function () {
     appState.debug.debugIsVisible = !appState.debug.debugIsVisible;
-
-    // update cell dimensions ******
 
     appState.notify();
   }.bind(undefined),
@@ -1540,124 +1566,128 @@ var App = function (_React$Component) {
         _react2.default.createElement(_controls2.default, _extends({ isInterpreting: isInterpreting }, this.props.appState)),
         _react2.default.createElement(_grid2.default, this.props.appState),
         this.props.appState.debug.debugIsVisible ? _react2.default.createElement(_debugger2.default, _extends({ isInterpreting: isInterpreting }, this.props.appState)) : _react2.default.createElement(_debugTab.DebugTab, this.props.appState),
-        _react2.default.createElement(
-          'div',
-          {
-            style: {
-              marginTop: 10,
-              padding: '5px',
-              width: 300,
-              border: '1px solid #ddd',
-              borderRadius: '5px',
-              background: '#fafafa'
-            }
-          },
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(
-              'b',
-              null,
-              'Hot Key'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(
-              'b',
-              null,
-              'p'
-            ),
-            ': ',
-            _react2.default.createElement(
-              'span',
-              null,
-              'brush Mode'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(
-              'b',
-              null,
-              'b'
-            ),
-            ': ',
-            _react2.default.createElement(
-              'span',
-              null,
-              'bucket Mode'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(
-              'b',
-              null,
-              's'
-            ),
-            ': ',
-            _react2.default.createElement(
-              'span',
-              null,
-              'toggle display block size'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(
-              'b',
-              null,
-              'alt+space'
-            ),
-            ': ',
-            _react2.default.createElement(
-              'span',
-              null,
-              'run / paused'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(
-              'b',
-              null,
-              '+'
-            ),
-            ': ',
-            _react2.default.createElement(
-              'span',
-              null,
-              'increase run speed'
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(
-              'b',
-              null,
-              '-'
-            ),
-            ': ',
-            _react2.default.createElement(
-              'span',
-              null,
-              'decrease run speed'
-            )
-          )
-        )
+        _react2.default.createElement(HotKeyInfo, null)
       );
     }
   }]);
 
   return App;
 }(_react2.default.Component);
+
+var HotKeyInfo = function HotKeyInfo() {
+  return _react2.default.createElement(
+    'div',
+    {
+      style: {
+        marginTop: 10,
+        padding: '5px',
+        width: 300,
+        border: '1px solid #ddd',
+        borderRadius: '5px',
+        background: '#fafafa'
+      }
+    },
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'b',
+        null,
+        'Hot Key'
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'b',
+        null,
+        'p'
+      ),
+      ': ',
+      _react2.default.createElement(
+        'span',
+        null,
+        'brush Mode'
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'b',
+        null,
+        'b'
+      ),
+      ': ',
+      _react2.default.createElement(
+        'span',
+        null,
+        'bucket Mode'
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'b',
+        null,
+        's'
+      ),
+      ': ',
+      _react2.default.createElement(
+        'span',
+        null,
+        'toggle display block size'
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'b',
+        null,
+        'alt+space'
+      ),
+      ': ',
+      _react2.default.createElement(
+        'span',
+        null,
+        'run / paused'
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'b',
+        null,
+        '+'
+      ),
+      ': ',
+      _react2.default.createElement(
+        'span',
+        null,
+        'increase run speed'
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'b',
+        null,
+        '-'
+      ),
+      ': ',
+      _react2.default.createElement(
+        'span',
+        null,
+        'decrease run speed'
+      )
+    )
+  );
+};
 
 document.addEventListener('DOMContentLoaded', function () {
   _reactDom2.default.render(_react2.default.createElement(App, { appState: appState }), document.getElementById('root'));
