@@ -652,6 +652,7 @@ var DebugControls = function DebugControls(_ref2) {
       stop = _ref2.stop,
       paintMode = _ref2.paintMode,
       toggleSetBP = _ref2.toggleSetBP,
+      runner = _ref2.runner,
       runSpeed = _ref2.runSpeed;
   return _react2.default.createElement(
     'div',
@@ -672,6 +673,7 @@ var DebugControls = function DebugControls(_ref2) {
             type: 'button',
             className: 'btn btn-success',
             title: 'Run from the beginning',
+            disabled: runner,
             onClick: start
           },
           _react2.default.createElement('i', { className: 'glyphicon glyphicon-play' })
@@ -700,6 +702,7 @@ var DebugControls = function DebugControls(_ref2) {
             type: 'button',
             className: 'btn btn-info',
             title: 'Step',
+            disabled: runner,
             onClick: step
           },
           _react2.default.createElement('i', { className: 'glyphicon glyphicon-step-forward' })
@@ -710,6 +713,7 @@ var DebugControls = function DebugControls(_ref2) {
             type: 'button',
             className: 'btn btn-info',
             title: 'Continue running from this point',
+            disabled: runner,
             onClick: cont
           },
           _react2.default.createElement('i', { className: 'glyphicon glyphicon-fast-forward' })
@@ -1330,6 +1334,8 @@ var appState = {
       appState.debug.block = null;
       appState.debug.currCommand = null;
       appState.debug.interpreter = null;
+      clearInterval(appState.debug.runner);
+      appState.debug.runner = null;
 
       appState.notify();
 
@@ -1424,7 +1430,9 @@ var appState = {
           appState.debug.runner = null;
         } else if ((step = appState.debug.interpreter.next()).done) {
           // if the generator is finished, clear the interpreter
+          clearInterval(appState.debug.runner);
           appState.debug.interpreter = null;
+          appState.debug.runner = null;
           appState.notify();
         } else {
           for (var prop in step.value) {
@@ -1450,6 +1458,8 @@ var appState = {
       appState.debug.interpreter = null;
       appState.debug.block = null;
       appState.debug.currCommand = null;
+      clearInterval(appState.debug.runner);
+      appState.debug.runner = null;
       appState.notify();
     }.bind(undefined),
 
@@ -1457,6 +1467,7 @@ var appState = {
     pause: function () {
       clearInterval(appState.debug.runner);
       appState.debug.runner = null;
+      appState.notify();
     }.bind(undefined)
   }
 };

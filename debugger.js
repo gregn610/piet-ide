@@ -173,6 +173,7 @@ const DebugControls = ({
   stop,
   paintMode,
   toggleSetBP,
+  runner,
   runSpeed
 }) => (
   <div>
@@ -186,6 +187,7 @@ const DebugControls = ({
           type="button"
           className="btn btn-success"
           title="Run from the beginning"
+          disabled={runner}
           onClick={start}
         >
           <i className="glyphicon glyphicon-play" />
@@ -208,6 +210,7 @@ const DebugControls = ({
           type="button"
           className="btn btn-info"
           title="Step"
+          disabled={runner}
           onClick={step}
         >
           <i className="glyphicon glyphicon-step-forward" />
@@ -216,6 +219,7 @@ const DebugControls = ({
           type="button"
           className="btn btn-info"
           title="Continue running from this point"
+          disabled={runner}
           onClick={cont}
         >
           <i className="glyphicon glyphicon-fast-forward" />

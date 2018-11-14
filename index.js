@@ -361,6 +361,8 @@ const appState = {
       appState.debug.block = null;
       appState.debug.currCommand = null;
       appState.debug.interpreter = null;
+      clearInterval(appState.debug.runner);
+      appState.debug.runner = null;
 
       appState.notify();
 
@@ -461,7 +463,9 @@ const appState = {
           appState.debug.runner = null;
         } else if ((step = appState.debug.interpreter.next()).done) {
           // if the generator is finished, clear the interpreter
+          clearInterval(appState.debug.runner);
           appState.debug.interpreter = null;
+          appState.debug.runner = null;
           appState.notify();
         } else {
           for (var prop in step.value) {
@@ -490,6 +494,8 @@ const appState = {
       appState.debug.interpreter = null;
       appState.debug.block = null;
       appState.debug.currCommand = null;
+      clearInterval(appState.debug.runner);
+      appState.debug.runner = null;
       appState.notify();
     }).bind(this),
 
@@ -497,6 +503,7 @@ const appState = {
     pause: (() => {
       clearInterval(appState.debug.runner);
       appState.debug.runner = null;
+      appState.notify();
     }).bind(this)
   }
 };
