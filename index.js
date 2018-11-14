@@ -186,9 +186,10 @@ const appState = {
     window.removeEventListener('mouseup', appState.endDraggingEventHandler);
   }).bind(this),
 
-  setMouseDown: (() => {
+  setMouseDown: ((row, cell) => {
     if (appState.paintMode === 'BRUSH') {
       appState.paintDragging = true;
+      appState.brushPaint(row, cell);
       window.addEventListener('mouseup', appState.endDraggingEventHandler);
     }
     appState.notify();

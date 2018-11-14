@@ -938,7 +938,9 @@ var Grid = function Grid(_ref) {
                 onMouseOver: function onMouseOver() {
                   return setCellInFocus(i, j);
                 },
-                onMouseDown: setMouseDown,
+                onMouseDown: function onMouseDown() {
+                  return setMouseDown(i, j);
+                },
                 onClick: function onClick() {
                   return handleCellClick(i, j);
                 }
@@ -1181,9 +1183,10 @@ var appState = {
     window.removeEventListener('mouseup', appState.endDraggingEventHandler);
   }.bind(undefined),
 
-  setMouseDown: function () {
+  setMouseDown: function (row, cell) {
     if (appState.paintMode === 'BRUSH') {
       appState.paintDragging = true;
+      appState.brushPaint(row, cell);
       window.addEventListener('mouseup', appState.endDraggingEventHandler);
     }
     appState.notify();

@@ -53,7 +53,7 @@ const Grid = ({
                 textAlign: 'center'
               }}
               onMouseOver={() => setCellInFocus(i, j)}
-              onMouseDown={setMouseDown}
+              onMouseDown={() => setMouseDown(i, j)}
               onClick={() => handleCellClick(i, j)}
             >
               {blocks[i][j] == debug.block
