@@ -1,6 +1,9 @@
 import React from 'react';
 
 import ColourPicker from './colourPicker.js';
+import ImportExportMenu from './ImportExportMenu.js'
+import PaintModeSwitch from './PaintModeSwitch.js'
+import BSDisplaySwitch from './BSDisplaySwitch.js'
 
 class Controls extends React.Component {
   // manually update input values when dims are changed from appState (eg. when image file
@@ -115,88 +118,5 @@ class Controls extends React.Component {
     );
   }
 }
-
-const ImportExportMenu = ({ isInterpreting, importImg, exportPng }) => (
-  <div style={{ display: 'flex', marginBottom: 10 }}>
-    <div
-      className="btn btn-default"
-      style={{ flex: 1, margin: '0 10px 0 5px' }}
-      value="Import"
-      disabled={isInterpreting ? 'disabled' : ''}
-      onClick={() => document.getElementById('fileChooser').click()}
-    >
-      Import
-      <input
-        key="hidden-file-input"
-        type="file"
-        id="fileChooser"
-        accept="image/png, image/bmp, image/jpeg, image/gif"
-        style={{ display: 'none' }}
-        onChange={event => {
-          importImg(event.target.files[0]);
-          event.target.value = '';
-        }}
-      />
-    </div>
-    <button
-      style={{ flex: 1 }}
-      type="button"
-      className="btn btn-default"
-      onClick={exportPng}
-    >
-      Export to PNG
-    </button>
-  </div>
-);
-
-const PaintModeSwitch = ({ paintMode, selectPaintMode }) => (
-  <div className="btn-group" role="group">
-    <button
-      type="button"
-      title="Brush mode (fill single pixel)"
-      className={'btn btn-default ' + (paintMode == 'BRUSH' ? 'active' : '')}
-      onClick={() => selectPaintMode('BRUSH')}
-    >
-      <i className="fi-pencil" style={{ fontSize: '14pt' }} />
-    </button>
-    <button
-      type="button"
-      title="Bucket mode (fill block of pixels)"
-      className={'btn btn-default ' + (paintMode == 'BUCKET' ? 'active' : '')}
-      onClick={() => selectPaintMode('BUCKET')}
-    >
-      <i className="fi-paint-bucket" style={{ fontSize: '14pt' }} />
-    </button>
-  </div>
-);
-
-const BSDisplaySwitch = ({ displayBS, toggleDisplayBS }) =>
-  displayBS ? (
-    <button
-      type="button"
-      className={'btn btn-default'}
-      style={{ marginRight: 5 }}
-      onClick={toggleDisplayBS}
-    >
-      <i
-        className="glyphicon glyphicon-eye-open"
-        title="Show block sizes"
-        style={{ fontSize: '16px' }}
-      />
-    </button>
-  ) : (
-    <button
-      type="button"
-      className={'btn btn-default'}
-      style={{ marginRight: 5 }}
-      onClick={toggleDisplayBS}
-    >
-      <i
-        className="glyphicon glyphicon-eye-close"
-        title="Show block sizes"
-        style={{ fontSize: '16px' }}
-      />
-    </button>
-  );
 
 export default Controls;
